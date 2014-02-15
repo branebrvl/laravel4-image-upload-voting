@@ -10,7 +10,6 @@
 | and give it the Closure to execute when that URI is requested.
 |
 */
-
 Route::get('/', array('as'=>'index','uses'=>'BookController@getIndex'));
 
 Route::post('/user/login', array('uses'=>'UserController@postLogin'));

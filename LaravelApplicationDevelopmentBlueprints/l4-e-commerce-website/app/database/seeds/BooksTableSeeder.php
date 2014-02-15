@@ -4,7 +4,7 @@ class BooksTableSeeder extends Seeder {
 
   public function run() 
   {
-    DB::table('books')->truncate();
+    // DB::table('books')->truncate();
     DB::table('books')->delete();
 
     $faker = Faker\Factory::create();
@@ -14,10 +14,10 @@ class BooksTableSeeder extends Seeder {
           'title' => $faker->company,
           'isbn' => $faker->randomNumber(13),
           'cover' => $faker->imageUrl,
-          'price' => $faker->randomFloat(2),
+          'price' => $faker->randomFloat(2, 5, 99999999),
           'author_id' => $faker->randomNumber(1,99),
-          'created_at' => $faker->dateTime,
-          'updated_at' => $faker->dateTime
+          'created_at' => new DateTime,
+          'updated_at' => new DateTime
         ]);
     }
   }

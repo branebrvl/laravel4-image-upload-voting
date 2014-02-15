@@ -16,7 +16,7 @@ class CreateCartsTable extends Migration {
 			$table->increments('id');
 			$table->integer('member_id')->unsigned()->default(0);
 			$table->integer('book_id')->unsigned()->default(0);
-			$table->integer('amount');
+			$table->integer('amount')->default(0);
 			$table->decimal('total', 10, 2);
       $table->foreign('member_id')->references('id')->on('users')->onDelete('cascade');
       $table->foreign('book_id')->references('id')->on('books')->onDelete('cascade');

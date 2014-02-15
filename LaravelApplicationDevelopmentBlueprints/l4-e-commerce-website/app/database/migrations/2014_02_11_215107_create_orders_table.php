@@ -16,7 +16,7 @@ class CreateOrdersTable extends Migration {
 			$table->increments('id');
 			$table->integer('member_id')->unsigned()->default(0);
 			$table->string('address');
-			$table->decimal('total', 10, 2);
+			$table->decimal('total', 12, 2);
 			$table->timestamps();
 		});
 	}
