@@ -13,7 +13,7 @@ class BooksTableSeeder extends Seeder {
       DB::table('books')->insert([
           'title' => $faker->company,
           'isbn' => $faker->randomNumber(13),
-          'cover' => $faker->imageUrl,
+          'cover' => $faker->imageUrl(290,218,'technics') . $faker->randomNumber(1,10),
           'price' => $faker->randomFloat(2, 5, 99999999),
           'author_id' => $faker->randomNumber(1,99),
           'created_at' => new DateTime,

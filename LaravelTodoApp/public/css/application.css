@@ -1,0 +1,8 @@
+body { padding-top: 50px; }
+
+.error { font-size: 85%; color: #F00; font-style: italic; }
+
+li img { margin-right: 1em; }
+.completed { background: #EEE; }
+form.task-update-form { float: left; margin-top: 1em; margin-right: 1.5em; }
+a.task-delete { margin-top: 0.5em; float: right; }

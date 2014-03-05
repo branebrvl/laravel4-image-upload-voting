@@ -1,0 +1,13 @@
+{
+  "repository" : {
+    "type" : "git",
+    "url" : "http://github.com/isaacs/npm.git"
+  },
+  "devDependencies": {
+    "gulp": "~3.5.2",
+    "gulp-phpunit": "0.0.1",
+    "gulp-notify": "~0.4.1",
+    "through2": "~0.4.1",
+    "gulp-util": "~2.2.14"
+  }
+}

@@ -9,7 +9,8 @@ class AuthorsTableSeeder extends Seeder {
 
     $faker = Faker\Factory::create();
 
-    for ($i = 0; $i < 100; $i++) {
+    for ($i = 0; $i < 100; $i++)
+    {
       DB::table('authors')->insert([
           'name' => $faker->firstName(),
           'surname' => $faker->lastName(),

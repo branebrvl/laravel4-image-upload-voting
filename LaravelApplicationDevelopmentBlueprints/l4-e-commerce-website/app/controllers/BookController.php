@@ -3,9 +3,14 @@ class BookController extends BaseController {
 
 	public function getIndex()
 	{
-		$books = Book::all();
+    start('run-books-all', 'Getting all book');
+    $books = Book::with('author')->get()->toArray();
+    stop('run-books-all');
 
-		return View::make('book_list')->with('books',$books);
+    l($books);
+
+		// return View::make('book_list')->with('books',$books);
+		return View::make('book_list')->with(compact('books'));
 	}
 
 }

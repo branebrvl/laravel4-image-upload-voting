@@ -27,12 +27,11 @@ class OrderController extends BaseController {
 	   		return Redirect::route('index')->with('error','Your cart is empty.');
 	   	}
 
-	    $order = Order::create(
-	    	array(
+	    $order = Order::create(array(
 	    	'member_id'=>$member_id,
 	    	'address'=>$address,
 	    	'total'=>$cart_total
-	    	));
+	    ));
 
 	    foreach ($cart_books as $order_books) {
 

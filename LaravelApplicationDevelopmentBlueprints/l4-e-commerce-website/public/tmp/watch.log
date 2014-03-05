@@ -1,0 +1,19 @@
+[4mRunning "watch" task[24m
+Waiting...[32mOK[39m
+[32m>> [39mFile "less/index.less" changed.
+
+[4mRunning "less:src" (less) task[24m
+File [36mstyles/css/custom.css[39m created.
+
+[32mDone, without errors.[39m
+... Reload less/index.less ...
+[36mCompleted in 0.942s at Sun Feb 23 2014 22:31:59 GMT-0800 (PST)[39m - Waiting...
+[32mOK[39m
+[32m>> [39mFile "less/index.less" changed.
+
+[4mRunning "less:src" (less) task[24m
+File [36mstyles/css/custom.css[39m created.
+
+[32mDone, without errors.[39m
+... Reload less/index.less ...
+[36mCompleted in 0.898s at Sun Feb 23 2014 22:34:15 GMT-0800 (PST)[39m - Waiting...

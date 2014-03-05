@@ -3,19 +3,19 @@
 @section('content')
 
 <div class="container">
-  <div class="span12">
+  <div class="span12 books">
     <div class="row">
-      <ul class="thumbnails">
+      <ul class="thumbnails list-unstyled">
         @foreach($books as $book)
         <li class="span4">
-          <div class="thumbnail">
-            <img src="{{$book->cover}}" alt="ALT NAME">
+          <div class="thumbnail" style="height:475px">
+            <img src="{{$book['cover']}}" alt="ALT NAME">
             <div class="caption">
-              <h3>{{$book->title}}</h3>
-              <p>Author : <b>{{$book->author->name}} {{$book->author->surname}}</b></p>
-              <p>Price : <b>{{$book->price}}</b></p>
+              <h3>{{$book['title']}}</h3>
+             <p>Author : <b>{{$book['author']['name']}} {{$book['author']['surname']}}</b></p>
+              <p>Price : <b>{{$book['price']}}</b></p>
               <form action="/cart/add" name="add_to_cart" method="post" accept-charset="UTF-8">
-                <input type="hidden" name="book" value="{{$book->id}}" />
+                <input type="hidden" name="book" value="{{$book['id']}}" />
                 <select name="amount" style="width: 100%;">
                   <option value="1">1</option>
                   <option value="2">2</option>

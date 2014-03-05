@@ -4,57 +4,45 @@
   <title>Awesome Book Store</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- Bootstrap -->
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="styles/css/index.css" rel="stylesheet">
+  <!-- <link href="//netdna.bootstrapcdn.com/twitter&#45;bootstrap/2.3.1/css/bootstrap.min.css" rel="stylesheet"> -->
 </head>
 <body>
-<div class="navbar navbar-inverse nav">
-    <div class="navbar-inner">
-        <div class="container">
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </a>
-            <a class="brand" href="/">Awesome Book Store</a>
-            <div class="nav-collapse collapse">
-              <ul class="nav">
-                  <li class="divider-vertical"></li>
-                  <li><a href="/"><i class="icon-home icon-white"></i> Book List</a></li>
-              </ul>
-              <div class="pull-right">
-                <ul class="nav pull-right">
-                @if(!Auth::check())
-                <ul class="nav pull-right">
-                  <li class="divider-vertical"></li>
-                  <li class="dropdown">
-                    <a class="dropdown-toggle" href="#" data-toggle="dropdown">Sign In <strong class="caret"></strong></a>
-                    <div class="dropdown-menu" style="padding: 15px; padding-bottom: 0px;">
-                      <p>Please Login</a>
-                        <form action="/user/login" method="post" accept-charset="UTF-8">
-                          <input id="email" style="margin-bottom: 15px;" type="text" name="email" size="30" placeholder="email" />
-                          <input id="password" style="margin-bottom: 15px;" type="password" name="password" size="30" />
-                          <input class="btn btn-info" style="clear: left; width: 100%; height: 32px; font-size: 13px;" type="submit" name="commit" value="Sign In" />
-                        </form>
-                      </div>
-                    </li>
-                  </ul>
-                @else
-                <li><a href="/cart"><i class="icon-shopping-cart icon-white"></i> Your Cart</a></li>
-                  <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{Auth::user()->name}} <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/user/orders"><i class="icon-envelope"></i> My Orders</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/user/logout"><i class="icon-off"></i> Logout</a></li>
-                        </ul>
-                    </li>
-                @endif
-                </ul>
-              </div>
-            </div>
+<div class="navbar navbar-inverse" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Book Store</a>
         </div>
+        <div class="navbar-collapse collapse">
+          @if(!Auth::check())
+          <form class="navbar-form navbar-right" role="form">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success">Sign in</button>
+          </form>
+          @else
+          <li><a href="/cart"><i class="icon-shopping-cart icon-white"></i> Your Cart</a></li>
+            <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{Auth::user()->name}} <b class="caret"></b></a>
+                  <ul class="dropdown-menu">
+                      <li><a href="/user/orders"><i class="icon-envelope"></i> My Orders</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/user/logout"><i class="icon-off"></i> Logout</a></li>
+                  </ul>
+              </li>
+          @endif
+        </div><!--/.navbar-collapse -->
+      </div>
     </div>
-</div>
-
 @yield('content')
 
   <script src="http://code.jquery.com/jquery.js"></script>

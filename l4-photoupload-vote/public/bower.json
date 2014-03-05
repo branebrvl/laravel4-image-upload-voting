@@ -1,0 +1,21 @@
+{
+  "name": "vagrant-laravel",
+  "version": "0.0.0",
+  "authors": [
+    "si-tech@evolvemediallc.com"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "underscore": "~1.5.2",
+    "bootstrap": "~3.0.2"
+  }
+}

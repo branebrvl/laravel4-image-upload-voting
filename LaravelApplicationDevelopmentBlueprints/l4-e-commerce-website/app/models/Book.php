@@ -12,7 +12,7 @@ class Book extends Eloquent {
     'author_id'
   );
 
-  public function Author() 
+  public function author() 
   {
     return $this->belongsTo('Author', 'author_id');
   }

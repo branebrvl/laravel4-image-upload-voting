@@ -1,0 +1,54 @@
+// Typography
+
+/* 	The values that go in this file are color, font-family, font-size, line-height, white-space, and any universal margins/paddings */
+
+body {
+	.helvetica;
+	color: @site-base-color;
+	font-size: @body-font-size;
+	line-height: @body-line-height;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+	// add mixin for font family of headers
+	.mrs-sheppards;
+}
+
+
+h1 {
+	color: @title-header;
+}
+
+h2 {
+	color: @main-header;
+}
+
+h2 {
+	font-size: 16px;
+}
+
+h3, h4, h5, h6 {
+	color: @sub-headers;
+}
+
+
+h3 {
+	font-size: 14px;
+}
+
+h4, h5, h6 {
+	font-size: 12px;
+}
+
+
+.flip {
+	font-size: 13px;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
+
+
