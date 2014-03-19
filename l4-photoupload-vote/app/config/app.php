@@ -111,6 +111,7 @@ return array(
  		'Clockwork\Support\Laravel\ClockworkServiceProvider',
     'Laracasts\Utilities\UtilitiesServiceProvider',
     'PhotoUpload\Repositories\RepoServiceProvider',
+    'PhotoUpload\Services\Navigation\NavigationServiceProvider',
 	),
 
 	/*
@@ -176,6 +177,7 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
+    'Navigation'      => 'PhotoUpload\Services\Navigation\Facades\Navigatione',
 
 	),
 

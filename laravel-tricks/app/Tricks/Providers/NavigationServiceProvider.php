@@ -1,6 +1,4 @@
-<?php
-
-namespace Tricks\Providers;
+<?php namespace Tricks\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Tricks\Services\Navigation\Builder;

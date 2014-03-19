@@ -1,9 +1,5 @@
 <?php
 
-// specify require-dev service providers, aliases are specifed in app/config/local/app.php
-App::register( 'Clockwork\Support\Laravel\ClockworkServiceProvider' );
-App::register( 'Way\Generators\GeneratorsServiceProvider' );
-
 function l($val)
 {
   return Clockwork::info($val);

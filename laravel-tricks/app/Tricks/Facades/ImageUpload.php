@@ -4,6 +4,11 @@ namespace Tricks\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * ImageUpload 
+ * 
+ * @uses Facade
+ */
 class ImageUpload extends Facade
 {
     /**

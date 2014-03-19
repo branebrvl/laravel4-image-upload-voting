@@ -2,13 +2,15 @@
 
 use Acme\Transformers\LessonTransformer;
 
-class LessonsController extends \BaseController {
+class LessonsController extends ApiController{
 
   protected $lessonTransformer;
 
   function __construct(LessonTransformer $lessonTransformer)
   {
     $this->lessonTransformer = $lessonTransformer;
+
+    $this->beforeFilter('auth.basic', ['on' => 'post']);
   }
 	/**
 	 * Display a listing of the resource.
@@ -19,9 +21,9 @@ class LessonsController extends \BaseController {
   {
     $lessons = Lesson::all();
 
-    return Response::json([
+    return $this->respond([
       'data'=> $this->lessonTransformer->transformCollection($lessons->toArray())
-      ], 200);
+      ]);
 	}
 
 	/**
@@ -41,9 +43,15 @@ class LessonsController extends \BaseController {
 	 */
 	public function store()
 	{
-		//
-	}
+    if( ! Input::get('title') or ! Input::get('body') )
+    {
+      return $this->respondValidationError('Parameters failed validation for a lesson');
+    }
 
+    Lesson::create(Input::all());
+
+    return $this->respondCreated('Lesson successfully created!');
+  }
 	/**
 	 * Display the specified resource.
 	 *
@@ -55,16 +63,13 @@ class LessonsController extends \BaseController {
     $lesson = Lesson::find($id);
     
     if( !$lesson ){
-      return Response::json([
-        'error' => [
-          'message' => 'Lesson does not exist'
-        ]
-      ],404);
-    } else {
-    return Response::json([
+      return $this->respondNotFound('Lesson does not exist');
+    } 
+
+    return $this->respond([
       'data' => $this->lessonTransformer->transform($lesson->toArray())
-      ], 200);
-    }
+    ]);
+    
 	}
 
 	/**

@@ -1,18 +1,15 @@
-<?php namespace PhotoUpload\models;
+<?php namespace PhotoUpload\Models;
 
-class Image extends \Eloquent {
+use Illuminate\Database\Eloquent\Model;
+
+class Image extends Model {
+
   protected $table = 'images';
 
-  protected $guarded = 'id, show';
-
-  public static $uploadRules = array(
-      'image'=> 'required|image'
-  );
+  protected $guarded = ['id', 'show'];
 
   public function users() 
   {
     return $this->belongsToMany('\PhotoUpload\models\User','votes')->withPivot('vote', 'notification')->withTimestamps();
   }
-
-
 }

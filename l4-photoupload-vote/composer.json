@@ -12,13 +12,12 @@
     "way/generators": "dev-master",
     "phpunit/phpunit": "3.7.*",
     "itsgoingd/clockwork": "dev-master",
-    "fzaninotto/faker": "dev-master"
+    "fzaninotto/faker": "dev-master",
+    "phpspec/phpspec": "dev-master"
   },
   "autoload": {
     "classmap": [
    "app/commands",
-   "app/controllers",
-   "app/models",
    "app/database/migrations",
    "app/database/seeds",
    "app/tests/TestCase.php"

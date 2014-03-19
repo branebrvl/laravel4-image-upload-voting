@@ -1,8 +1,8 @@
 <?php namespace PhotoUpload\Repositories;
 
 use Illuminate\Support\ServiceProvider;
-use PhotoUpload\Repositories\Image\DbImageRepository;
-use PhotoUpload\models\Image;
+use PhotoUpload\Repositories\Image\EloquentImageRepository;
+use PhotoUpload\Models\Image;
 
 class RepoServiceProvider extends ServiceProvider {
 
@@ -10,7 +10,7 @@ class RepoServiceProvider extends ServiceProvider {
   {
     $this->app->bind('PhotoUpload\Repositories\Image\ImageRepositoryInterface', function()
     {
-       return new DbImageRepository(new Image);
+       return new EloquentImageRepository(new Image);
     });
   }
 }

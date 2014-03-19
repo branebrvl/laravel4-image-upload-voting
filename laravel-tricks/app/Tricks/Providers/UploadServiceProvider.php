@@ -5,6 +5,11 @@ namespace Tricks\Providers;
 use Illuminate\Support\ServiceProvider;
 use Tricks\Services\Upload\ImageUploadService;
 
+/**
+ * UploadServiceProvider 
+ * 
+ * @uses ServiceProvider
+ */
 class UploadServiceProvider extends ServiceProvider
 {
     /**

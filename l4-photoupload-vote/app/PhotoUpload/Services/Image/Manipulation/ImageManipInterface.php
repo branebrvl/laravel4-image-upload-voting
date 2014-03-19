@@ -8,7 +8,9 @@
  */
 interface ImageManipInterface
 {
-  public function from($from);
-  public function to($to);
+  public function errors();
+  public function succeeds();
+  public function make($path);
+  public function save($path);
   public function resize($width, $width);
 }

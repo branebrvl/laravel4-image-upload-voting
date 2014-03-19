@@ -1,6 +1,30 @@
 <?php return [
 	  
     'debug' => true,
-    // specify require-dev aliases, service proveders are specifed in start/local.php
-    'aliases' => ['Clockwork' => 'Clockwork\Support\Laravel\Facade'],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Append environment service providers
+    |--------------------------------------------------------------------------
+    */
+
+    'providers' => append_config(array(
+
+        'Clockwork\Support\Laravel\ClockworkServiceProvider',
+        'Way\Generators\GeneratorsServiceProvider',
+
+    )),
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Append environment aliases
+    |--------------------------------------------------------------------------
+    */
+
+    'aliases' => append_config(array(
+
+        'Clockwork'       => 'Clockwork\Support\Laravel\Facade',
+
+    )),
+
 ];
