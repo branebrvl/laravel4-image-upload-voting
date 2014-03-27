@@ -1,6 +1,4 @@
-<?php
-
-namespace spec\PhotoUpload\Models;
+<?php namespace spec\PhotoUpload\Models;
 
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;

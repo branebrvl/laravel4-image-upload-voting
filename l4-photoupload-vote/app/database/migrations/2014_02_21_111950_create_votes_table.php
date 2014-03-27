@@ -13,14 +13,24 @@ class CreateVotesTable extends Migration {
 	public function up()
 	{
 		Schema::create('votes', function(Blueprint $table) {
-			$table->increments('id');
+			$table->increments('id')->unsigned();
 			$table->integer('user_id')->unsigned();
 			$table->integer('image_id')->unsigned();
-			$table->boolean('vote');
+			$table->integer('vote')->default(1);
 			$table->boolean('notification');
-      $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-      $table->foreign('image_id')->references('id')->on('images')->onDelete('cascade');
-      $table->timestamps();
+			$table->timestamps();
+
+      $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
+
+      $table->foreign('image_id')
+            ->references('id')
+            ->on('images')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 		});
 	}
 

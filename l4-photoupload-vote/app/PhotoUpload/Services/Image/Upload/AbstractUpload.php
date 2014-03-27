@@ -6,7 +6,7 @@
  * @uses ImageUploadInterface
  * @author Branislav Vladisavljev 
  */
-class ImageUpload implements ImageUploadInterface {
+class AbstractUpload implements ImageUploadInterface {
 
   /**
   * If there are any errors, they will be here
@@ -15,8 +15,18 @@ class ImageUpload implements ImageUploadInterface {
   */
   protected $errors = [];  
 
+  /**
+   * succeeds 
+   * 
+   * @var mixed
+   */
   protected $succeeds = false;
 
+  /**
+   * jsonBody 
+   * 
+   * @var mixed
+   */
   protected $jsonBody;
 
   /**
@@ -25,6 +35,27 @@ class ImageUpload implements ImageUploadInterface {
    * @var string
    */
   protected $extension = 'jpg';
+
+  /**
+   * The dimensions to resize the image to.
+   *
+   * @var int
+   */
+  protected $size = 160;
+
+  /**
+   * The path where the image should be saved. 
+   * 
+   * @var mixed
+   */
+  protected $path;
+
+  /**
+   * The quality the image should be saved in.
+   *  
+   * @var int
+   */ 
+  protected $quality = 65;
 
   /**
   * Filesystem instance.
@@ -73,6 +104,28 @@ class ImageUpload implements ImageUploadInterface {
   public function succeeds()
   {
     return $this->succeeds;
+  }
+
+  /**
+   * Get size for image mainupulation resize action. 
+   * 
+   * 
+   * @return int 
+   */
+  protected function getSize()
+  {
+    return $this->size;
+  }
+
+  /**
+   * Get size for image mainupulation resize action. 
+   * 
+   * 
+   * @return string
+   */
+  protected function getPath()
+  {
+    return $this->path;
   }
 
   /**
@@ -127,7 +180,7 @@ class ImageUpload implements ImageUploadInterface {
    * @param  string  $pathThumb
    * @return array
    */
-  protected function setJsonBody($filename, $mime, $path, $pathThumb)
+  protected function setJsonBody($filename, $mime, $path)
   {
       $this->jsonBody = [
           'images' => [
@@ -135,7 +188,6 @@ class ImageUpload implements ImageUploadInterface {
               'mime' => $mime,
               'size' => $this->getFileSize($path),
               'path' => $path,
-              'pathTumb' => $pathThumb
           ]
       ];
   }
@@ -154,26 +206,19 @@ class ImageUpload implements ImageUploadInterface {
    */
   public function handle(UploadedFile $image)
   {
-    $mime = $file->getMimeType();
     $filename = $this->makeFilename();
-    $path = $this->config('image.upload_path') . '/' . $filename;
-    $pathThumb = $this->config('image.thumb_path') . '/' . $filename;
-    $thumbWidth = $this->config('image.thumb_width');
+    $path = getSize() . '/' . $filename;
 
-    //We upload the image first to the upload folder, then get make a thumbnail from the uploaded image
-    $upload = $image->move(Config::get('image.upload_path'), $filename);
-    
-    //Our model that we've created is named Images, this library has an alias named Image, don't mix them two!
     //These parameters are related to the image processing class that we've included, not really related to Laravel
-    $this->imageManip->make($path)
-                     ->resize($thumbWidth, null)
-                     ->save($pathThumb);
+    $this->imageManip->make($image->getRealPath())
+                     ->resize(getSize(), null)
+                     ->save(getPath(), $this->quality);
 
     $this->succeeds = $this->imageManip->succeeds();
     
     if($this->succeeds) 
     {
-      $this->setJsonBody($filename, $mime, $path, $pathThumb);
+      $this->setJsonBody($filename, $this->getMimeType(), $path);
     } else {
       $this->errors = $this->imageManip->errors();
     }

@@ -15,7 +15,7 @@
         <meta property="og:description" content="@yield('description')" />
         <meta name="description" content="@yield('description')">
         <meta name="author" content="Branislav">
-        <title>@yield('title') | PhotoVote.com</title>
+        <title>@yield('title') | Render</title>
         <link rel="stylesheet" href="{{ URL::asset('css/laratricks.min.css') }}">
         <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
         @yield('styles')

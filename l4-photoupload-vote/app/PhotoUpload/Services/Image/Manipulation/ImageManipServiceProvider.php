@@ -2,7 +2,7 @@
                                
 use Illuminate\Support\ServiceProvider;
 use Intervention\Image\Facades\Image;
-use PhotoUpload\Service\Image\Manipulation\ImageManip;
+use PhotoUpload\Service\Image\Manipulation\Intervention\ImageManip;
 
 class ImageManipServiceProvider extends ServiceProvider {
 

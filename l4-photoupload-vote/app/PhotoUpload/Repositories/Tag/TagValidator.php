@@ -1,16 +1,15 @@
-<?php namespace PhotoUpload\Repositories\User;
+<?php namespace PhotoUpload\Repositories\Tag;
 
 use PhotoUpload\Validation\AbstractValidator;
 use PhotoUpload\Validation\ValidationInterface;
 
 /**
- * UserUploadValidator 
+ * TagUploadValidator 
  * 
  * @uses AbstractValidator
  * @uses ValidationInterface
- * @author Branislav Vladisavljev 
  */
-class UserUploadValidator extends AbstractValidator implements ValidationInterface
+class TagUploadValidator extends AbstractValidator implements ValidationInterface
 {
     protected $rules = [
     ];

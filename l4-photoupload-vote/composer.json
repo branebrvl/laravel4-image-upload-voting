@@ -6,7 +6,10 @@
   "require": {
     "laravel/framework": "4.1.*",
     "laracasts/utilities": "0.5",
-    "intervention/image": "dev-master"
+    "intervention/image": "dev-master",
+    "mccool/laravel-auto-presenter": "1.0.*",
+    "league/oauth2-client": "dev-master",
+    "thomaswelton/laravel-gravatar": "0.0.*"
   },
   "require-dev": {
     "way/generators": "dev-master",

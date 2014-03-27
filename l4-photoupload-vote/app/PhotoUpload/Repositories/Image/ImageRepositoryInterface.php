@@ -5,16 +5,14 @@ use PhotoUpload\Models\Image;
 interface ImageRepositoryInterface {
   public function getAll();
   public function getById($id); 
-  public function findAllForUser(User $user, $perPage = 9); 
-  public function findAllFavorites(User $user, $perPage = 9);
-  public function findAllPaginated($perPage = 9);
-  public function findMostRecent($perPage = 9);
-  public function findMostPopular($perPage = 9);
-  public function findMostCommented($perPage = 9);
-  public function incrementViews(Image $trick);
-  public function findNextImage(Image $trick);
-  public function findPrevious(Image $trick);
-  public function findForFeed(); 
-  public function edit(Image $trick, array $data);
-  public function create(array $data);
+  public function getAllPaginated($perPage = 9);
+  public function getMostRecent($perPage = 9);
+  public function getMostPopular($perPage = 9);
+  public function getMostCommented($perPage = 9);
+  public function incrementViews($id);
+  public function getNextImage(Image $image);
+  public function getPreviousImage(Image $image);
+  public function getForFeed(Image $image); 
+  public function update($id, array $data);
+  public function store(array $data);
 }

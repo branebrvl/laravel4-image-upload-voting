@@ -1,4 +1,4 @@
-<?php namespace Sneek\Validation;
+<?php namespace PhotoUpload\Validation;
 
 interface ValidationInterface
 {
@@ -6,7 +6,7 @@ interface ValidationInterface
      * We can set rules on the fly
      *
      * @param  array  $rules
-     * @return Sneek\Validation\ValidationInterface
+     * @return PhotoUpload\Validation\ValidationInterface
      */
     public function rules(array $rules);
 
@@ -15,7 +15,7 @@ interface ValidationInterface
      * should return itself to enable chaining
      *
      * @param  array $data The data under test
-     * @return Sneek\Validation\ValidationInterface
+     * @return PhotoUpload\Validation\ValidationInterface
      */
     public function with(array $data);
 

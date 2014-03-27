@@ -1,15 +1,14 @@
 <?php namespace PhotoUpload\Service\Image\Upload;
                                
 use Illuminate\Support\ServiceProvider;
-use PhotoUpload\Services\Image\Upload\ImageUpload;
+use PhotoUpload\Services\Image\Upload\Avatar\AvatarUpload;
 
 /**
  * ImageManipServiceProvider 
  * 
  * @uses ServiceProvider
- * @author Branislav Vladisavljev 
  */
-class ImageManipServiceProvider extends ServiceProvider {
+class ImageUploadServiceProvider extends ServiceProvider {
 
     /**
      * Register the service provider.
@@ -18,9 +17,9 @@ class ImageManipServiceProvider extends ServiceProvider {
      */
     public function register() 
     {
-      $this->app->bind('PhotoUpload\Services\Image\Upload\ImageUploadInterface', function($app)
+      $this->app->bind('PhotoUpload\Services\Image\Upload\Avatar\AvatarUpload', function($app)
       {
-         return new ImageUpload($app->files, $app->config);
+         return new AvatarUpload($app->files, $app->config);
       });
     }
 } 

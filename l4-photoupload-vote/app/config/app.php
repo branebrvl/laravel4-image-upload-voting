@@ -112,6 +112,8 @@ return array(
     'Laracasts\Utilities\UtilitiesServiceProvider',
     'PhotoUpload\Repositories\RepoServiceProvider',
     'PhotoUpload\Services\Navigation\NavigationServiceProvider',
+    'PhotoUpload\Events\EventServiceProvider',
+    'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
 	),
 
 	/*
@@ -178,6 +180,8 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
     'Navigation'      => 'PhotoUpload\Services\Navigation\Facades\Navigatione',
+
+    'Gravatar' => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 
 	),
 

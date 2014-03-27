@@ -1,0 +1,6 @@
+<?php
+
+return [
+  'Sudo',
+  'sudo',
+];

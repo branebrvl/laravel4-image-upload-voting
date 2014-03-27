@@ -9,7 +9,8 @@
 			</button>
 
 			<a class="navbar-brand" href="{{ url('/') }}">
-				<img width="207" height="50" src="{{ asset('img/logo@2x.1.png') }}">
+				<span class="sr-only">Logo</span>
+				{{-- <img width="207" height="50" src="{{ asset('img/logo@2x.1.png') }}"> --}}
 			</a>
 		</div>
 

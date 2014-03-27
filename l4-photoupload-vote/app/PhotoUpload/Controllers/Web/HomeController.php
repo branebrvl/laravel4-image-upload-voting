@@ -29,7 +29,7 @@ class HomeController extends BaseController
      */
     public function getIndex() 
     {
-        $images = $this->image->findAllPaginated();
+        $images = $this->image->getAllPaginated();
         // return \Response::make($image);
         $this->view('home.index', compact('images'));
     } 

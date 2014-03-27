@@ -1,4 +1,4 @@
-<?php namespace PhotoUpload\Services\Image\Manipulation;
+<?php namespace PhotoUpload\Services\Image\Manipulation\Intervention;
 
 use Intervention\Image\Facades\Image;
 /**

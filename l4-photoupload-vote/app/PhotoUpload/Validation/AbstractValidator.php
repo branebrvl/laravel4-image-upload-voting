@@ -1,4 +1,4 @@
-<?php namespace Sneek\Validation;
+<?php namespace PhotoUpload\Validation;
 
 use Illuminate\Validation\Factory;
 
@@ -56,7 +56,7 @@ abstract class AbstractValidator implements ValidationInterface
      * Set the data under test
      *
      * @param  array  $data
-     * @return Sneek\Validation\ValidationInterface
+     * @return PhotoUpload\Validation\ValidationInterface
      */
     final public function with(array $data)
     {
@@ -76,6 +76,16 @@ abstract class AbstractValidator implements ValidationInterface
     }
 
     /**
+     * Get the prepared validation rules.
+     *
+     * @return array
+     */
+    protected function getPreparedRules()
+    {
+        return $this->rules;
+    }
+
+    /**
      * Actually validate the data based on given rules
      *
      * @return bool
@@ -84,7 +94,7 @@ abstract class AbstractValidator implements ValidationInterface
     {
         $validation = $this->factory->make(
             $this->data,
-            $this->rules,
+            $this->getPreparedRules(),
             $this->messages
         );
 

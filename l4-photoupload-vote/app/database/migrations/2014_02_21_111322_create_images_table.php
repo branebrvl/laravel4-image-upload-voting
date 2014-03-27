@@ -13,16 +13,26 @@ class CreateImagesTable extends Migration {
 	public function up()
 	{
 		Schema::create('images', function(Blueprint $table) {
-			$table->increments('id');
+			$table->increments('id')->unsigned();
 			$table->integer('user_id')->unsigned();
-			$table->string('img_init_min');
+			$table->string('title', 140);
+      $table->string('slug')->unique();
+      $table->text('description')->nullable()->default(NULL);
+      $table->string('img_init_min');
 			$table->string('img_init_big');
 			$table->string('img_final_min');
 			$table->string('img_final_big');
 			$table->string('ip');
+      $table->integer('vote_cache')->unsigned()->default(0);
+      $table->integer('view_cache')->unsigned()->default(0);
 			$table->boolean('show')->default(1);
-      $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
       $table->timestamps();
+
+      $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->onUpdate('cascade')
+            ->onDelete('cascade');
 		});
 	}
 
