@@ -24,7 +24,7 @@ class Image extends Model {
    *
    * @var array
    */
-  // protected $with = [ 'tags', 'user' ];
+  protected $with = [ 'tags', 'user' ];
 
   /**
    * Fillable fields on database
@@ -36,15 +36,21 @@ class Image extends Model {
     'title',
     'slug',
     'description',
-    'img_init_min',
-    'img_init_big',
-    'img_final_min',
-    'img_final_big',
+    'img_min',
+    'img_big',
     'ip',
     'view_cache',
     'show'
   ];
 
+  /**
+  * We set clients ip here
+  *
+  * @var array
+  */
+  // public function setIpAttribute($data){
+  //   $this->attributes['ip'] = \Illuminate\Http\Request::getClientIp();
+  // }
   /**
    * Hash the password
    * 
@@ -59,7 +65,7 @@ class Image extends Model {
   }
 
   /**
-   * Convert the titlse to slug.
+   * Convert the title to slug.
    * 
    * @param mixed $pass pass 
    * 
@@ -89,7 +95,7 @@ class Image extends Model {
    *
    * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
    */
-  public function users()
+  public function user()
   {
     return $this->belongsTo('\PhotoUpload\Models\User');
   }

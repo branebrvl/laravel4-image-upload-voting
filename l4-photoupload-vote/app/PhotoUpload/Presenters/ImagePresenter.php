@@ -1,7 +1,7 @@
 <?php namespace PhotoUpload\Presenters;
 
-use PhotoUpload\models\User;
-use PhotoUpload\models\Image;
+use PhotoUpload\Models\User;
+use PhotoUpload\Models\Image;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\HTML;
 use McCool\LaravelAutoPresenter\BasePresenter;
@@ -62,7 +62,7 @@ class ImagePresenter extends BasePresenter
      * @param  \PhotoUpload\models\User $user
      * @return bool
      */
-    public function likedByUser(User $user)
+    public function likedByUser($user)
     {
         if (is_null($user)) {
             return false;

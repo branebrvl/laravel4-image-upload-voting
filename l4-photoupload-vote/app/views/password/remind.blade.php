@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title', 'Reset password')
 
 @section('content')
@@ -12,6 +14,13 @@
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                         An e-mail with the password reset link has been sent.
                       </div>
+                    @endif
+
+                    @if(Session::has('error'))
+                        <div class="alert alert-danger alert-dismissable">
+                          <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                          {{Session::get('error');}}
+                        </div>
                     @endif
 
                     {{ Form::open(['route' => 'auth.remind']) }}

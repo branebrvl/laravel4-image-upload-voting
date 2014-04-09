@@ -1,7 +1,10 @@
-<?php namespace PhotoUpload\Service\Image\Upload;
+<?php namespace PhotoUpload\Services\Image\Upload;
                                
 use Illuminate\Support\ServiceProvider;
 use PhotoUpload\Services\Image\Upload\Avatar\AvatarUpload;
+use PhotoUpload\Services\Image\Upload\Render\RenderUpload;
+use PhotoUpload\Services\Image\Upload\Render\RenderThumbUpload;
+use PhotoUpload\Utilities\Helpers;
 
 /**
  * ImageManipServiceProvider 
@@ -19,7 +22,27 @@ class ImageUploadServiceProvider extends ServiceProvider {
     {
       $this->app->bind('PhotoUpload\Services\Image\Upload\Avatar\AvatarUpload', function($app)
       {
-         return new AvatarUpload($app->files, $app->config);
+        return new AvatarUpload(
+          new ImageManip(new ImageInt), 
+          $app->files, 
+          $app->config,
+          new Helpers
+        );
+      });
+      
+      $this->app->bind('PhotoUpload\Services\Image\Upload\Render\RenderUpload', function($app)
+      {
+         return new RenderUpload($app->files, $app->config);
+      });
+
+      $this->app->bind('PhotoUpload\Services\Image\Upload\Render\RenderThumbUpload', function($app)
+      {
+        return new RenderThumbUpload(
+          new ImageManip(new ImageInt), 
+          $app->files, 
+          $app->config,
+          new Helpers
+        );
       });
     }
 } 

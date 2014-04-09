@@ -1,16 +1,18 @@
+@extends('layouts.main')
+
 @section('title','Welcome')
 
 @section('content')
 	<div class="container">
 		<div class="row push-down">
 			<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-				<h1 class="page-title">Latest tricks</h1>
+				<h1 class="page-title">Latest images</h1>
 			</div>
 			<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
 				@include('partials.search')
 			</div>
 		</div>
 
-    @include('tricks.grid', ['tricks' => $images])
+    @include('tricks.grid', ['images' => $images])
 	</div>
 @stop

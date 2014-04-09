@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title', $user->fullName)
 
 @section('content')
@@ -20,12 +22,12 @@
                 </div>
                 <table>
                     <tr>
-                        <th>Total tricks:</th>
-                        <td>{{ count($tricks) }}</td>
+                        <th>Total images:</th>
+                        <td>{{ count($images) }}</td>
                     </tr>
                     <tr>
-                        <th width="140">Last trick:</th>
-                        <td>{{ $user->lastActivity($tricks) }}</td>
+                        <th width="140">Last image:</th>
+                        <td>{{ $user->lastActivity($images) }}</td>
                     </tr>
                 </table>
             </div>
@@ -34,11 +36,11 @@
 
     <div class="row push-down">
         <div class="col-lg-12">
-            <h1 class="page-title">Submitted tricks</h1>
+            <h1 class="page-title">Submitted images</h1>
         </div>
     </div>
 
-    @include('tricks.grid', [ 'tricks' => $tricks ])
+    @include('tricks.grid', [ 'images' => $images ])
 </div>
 
 

@@ -1,5 +1,7 @@
 <?php namespace PhotoUpload\Repositories;
 
+use Illuminate\Database\Eloquent\Model;
+
 abstract class AbstractRepository {
 
 

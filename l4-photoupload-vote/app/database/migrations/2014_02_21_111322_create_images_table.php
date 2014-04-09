@@ -18,11 +18,8 @@ class CreateImagesTable extends Migration {
 			$table->string('title', 140);
       $table->string('slug')->unique();
       $table->text('description')->nullable()->default(NULL);
-      $table->string('img_init_min');
-			$table->string('img_init_big');
-			$table->string('img_final_min');
-			$table->string('img_final_big');
-			$table->string('ip');
+      $table->string('img_min');
+			$table->string('img_big');
       $table->integer('vote_cache')->unsigned()->default(0);
       $table->integer('view_cache')->unsigned()->default(0);
 			$table->boolean('show')->default(1);

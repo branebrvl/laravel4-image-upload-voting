@@ -1,15 +1,11 @@
-<?php
+<?php namespace PhotoUpload\Controllers\Web;
 
-namespace Controllers;
-
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
-use PhotoUpload\Repositories\ImageRepositoryInterface;
+use PhotoUpload\Repositories\Image\ImageRepositoryInterface;
 
-class ImagesController extends BaseController
+class ImagesController extends WebController
 {
     /**
      * Image repository.
@@ -19,16 +15,26 @@ class ImagesController extends BaseController
     protected $images;
 
     /**
+     * BaseController 
+     * 
+     * @var PhotoUpload\Controllers\Web
+     */
+    protected $base;
+    
+    /**
      * Create a new ImagesController instance.
      *
      * @param \PhotoUpload\Repositories\ImageRepositoryInterface  $images
      * @return void
      */
-    public function __construct(ImageRepositoryInterface $images)
-    {
-        parent::__construct();
+    public function __construct(
+      ImageRepositoryInterface $images,
+      BaseController $base
+    ) {
+      parent::__construct();
 
-        $this->images = $images;
+      $this->images = $images;
+      $this->base = $base;
     }
 
     /**
@@ -40,21 +46,22 @@ class ImagesController extends BaseController
     public function getShow($slug = null)
     {
         if (is_null($slug)) {
-            return $this->redirectRoute('home');
+            return $this->base->redirectRoute('home');
         }
 
-        $image = $this->images->findBySlug($slug);
+        $image = $this->images->getBySlug($slug);
 
         if (is_null($image)) {
-            return $this->redirectRoute('home');
+            return $this->base->redirectRoute('home');
         }
 
         Event::fire('image.view', $image);
 
-        $next = $this->images->findNextImage($image);
-        $prev = $this->images->findPreviousImage($image);
+        $next = $this->images->getNextImage($image);
+        $prev = $this->images->getPreviousImage($image);
 
-        $this->view('images.single', compact('image', 'next', 'prev'));
+        return $this->base
+                    ->view('tricks.single', compact('image', 'next', 'prev'));
     }
 
     /**
@@ -65,31 +72,27 @@ class ImagesController extends BaseController
      */
     public function postLike($slug)
     {
-        if (! Request::ajax() || ! Auth::check()) {
-            $this->redirectRoute('browse.recent');
+        if (! $this->base->request->ajax() || ! $this->base->auth->check()) {
+          $this->base->redirectRoute('browse.recent');
         }
 
-        $image = $this->images->findBySlug($slug);
-
+        $image = $this->images->getBySlug($slug);
         if (is_null($image)) {
-            return Response::make('error', 404);
+          return $this->base->request->make('error', 404);
         }
 
-        $user = Auth::user();
+        $user = $this->base->auth->user();
 
         $voted = $image->votes()->whereUserId($user->id)->first();
 
         if(!$voted) {
 
-            $user = $image->votes()->attach($user->id, [
-                'created_at' => new \DateTime,
-                'updated_at' => new \DateTime
-            ]);
-            $image->vote_cache = $image->vote_cache + 1;
+          $user = $image->votes()->attach($user->id);
+          $image->vote_cache = $image->vote_cache + 1;
 
         } else {
-            $image->votes()->detach($voted->id);
-            $image->vote_cache = $image->vote_cache - 1;
+          $image->votes()->detach($voted->id);
+          $image->vote_cache = $image->vote_cache - 1;
         }
 
         $image->save();

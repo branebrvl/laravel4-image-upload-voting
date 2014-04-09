@@ -4,10 +4,10 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use PhotoUpload\Exceptions\TagNotFoundException;
-use PhotoUpload\Repositories\DbRepository;
-use PhotoUpload\Repositories\TagRepositoryInterface;
+use PhotoUpload\Repositories\AbstractRepository;
+use PhotoUpload\Repositories\Tag\TagRepositoryInterface;
 
-class TagRepository extends DbRepository implements TagRepositoryInterface {
+class EloquentTagRepository extends AbstractRepository implements TagRepositoryInterface {
 
   /**
    * model 
@@ -16,24 +16,15 @@ class TagRepository extends DbRepository implements TagRepositoryInterface {
    */
   private $model;
 
-  /**
-   * strc 
-   * 
-   * @var mixed
-   */
-  private $strc;
-
     /**
      * Create a new EloquentTagRepository instance.
      *
      * @param  \Illuminate\Database\Eloquent\Model $model
-     * @param $strc
      * @return void
      */
-    public function __construct(Model $model, $strc)
+    public function __construct(Model $model)
     {
         $this->model = $model;
-        $this->strc = $strc;
     }
 
     /**
@@ -64,6 +55,17 @@ class TagRepository extends DbRepository implements TagRepositoryInterface {
         return $tags;
     }
 
+    /** 
+     * Get a tag by id.
+     *  
+     * @param  mixed  $id      
+     * @return \PhotoUpload\Models\Tag     
+     */
+    public function getById($id)   
+    {     
+        return $this->model->find($id); 
+    } 
+
     /**
      * Get all tags with the associated number of images.
      *
@@ -77,7 +79,7 @@ class TagRepository extends DbRepository implements TagRepositoryInterface {
      *
      * @return void
      */
-    public function getAllWithTrickCount()
+    public function getAllWithImageCount()
     {
         return $this->model
                     ->join('image_tag', 'tags.id', '=', 'image_tag.tag_id')
@@ -90,6 +92,27 @@ class TagRepository extends DbRepository implements TagRepositoryInterface {
                     ]);
     }
 
+    /** 
+     * Get all images for the tag that matches the given slug.
+     *  
+     * @param  string $slug
+     * @param  integer $perPage
+     * @return \Illuminate\Pagination\Paginator|\Images\Image[]
+     */ 
+    public function getImagesByTag($slug, $perPage = 9)
+    {
+        $tag = $this->model->whereSlug($slug)->first();
+    
+        if (is_null($tag)) {   
+            throw new TagNotFoundException('The tag "' . $slug . '" does not exist!'); 
+        }
+      
+        $images = $tag->images()->orderBy('created_at', 'desc')->paginate($perPage);
+      
+        return [ $tag, $images ];       
+    } 
+
+
     /**
      * Create a new tag in the database.
      *
@@ -100,10 +123,10 @@ class TagRepository extends DbRepository implements TagRepositoryInterface {
     {
       $data = [
         'name' => $data['name'],
-        'slug' => $this->str->slug($tag->name, '-')
+        'slug' => $data['name']
       ];
 
-      return $tag->model->create($data);
+      return $this->model->create($data);
     }
 
     /**
@@ -117,7 +140,7 @@ class TagRepository extends DbRepository implements TagRepositoryInterface {
     {
       $data = [
         'name' => $data['name'],
-        'slug' => $this->str->slug($tag->name, '-')
+        'slug' => $data['name']
       ];
 
        return $this->getById($id)->update($data);

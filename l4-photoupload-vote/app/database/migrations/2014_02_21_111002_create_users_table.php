@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration {
       $table->string('photo')->nullable()->default(NULL);
 			$table->string('username');
 			$table->string('password');
+      $table->timestamp('blocked_at')->nullable()->default(NULL);
       $table->integer('admin')->default(0);
       $table->timestamps();
 		});

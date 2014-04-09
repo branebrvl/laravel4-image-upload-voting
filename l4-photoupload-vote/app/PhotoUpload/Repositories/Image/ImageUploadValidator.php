@@ -8,7 +8,6 @@ use PhotoUpload\Validation\ValidationInterface;
  * 
  * @uses AbstractValidator
  * @uses ValidationInterface
- * @author Branislav Vladisavljev 
  */
 class ImageUploadValidator extends AbstractValidator implements ValidationInterface
 {

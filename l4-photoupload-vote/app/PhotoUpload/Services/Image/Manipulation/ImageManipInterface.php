@@ -11,6 +11,6 @@ interface ImageManipInterface
   public function errors();
   public function succeeds();
   public function make($path);
-  public function save($path);
+  public function save($path, $quality);
   public function resize($width, $width);
 }

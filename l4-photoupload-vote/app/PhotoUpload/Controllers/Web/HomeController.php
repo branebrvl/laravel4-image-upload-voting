@@ -2,7 +2,7 @@
 
 use PhotoUpload\Repositories\Image\ImageRepositoryInterface;
 
-class HomeController extends BaseController
+class HomeController extends WebController
 {
     /**
      * Image repository.       
@@ -10,18 +10,31 @@ class HomeController extends BaseController
      * @var \Image\Repositories\ImageRepositoryInterface
      */
     protected $image;         
+
+    /**
+     * BaseController 
+     * 
+     * @var PhotoUpload\Controllers\Web
+     */
+    protected $base;
     
     /**
      * Create a new HomeController instance.
      *
-     * @param  \Image\Repositories\ImageRepositoryInterface  $image
+     * @param \Image\Repositories\ImageRepositoryInterface  $image
+     * @param \PhotoUpload\Controllers\Web $base
      * @return void
      */   
-    public function __construct(ImageRepositoryInterface $image)
-    {   
-        $this->image = $image;        
+    function __construct(
+      ImageRepositoryInterface $image,
+      BaseController $base
+    ) {   
+      parent::__construct();
+
+      $this->image = $image;        
+      $this->base = $base;
     }   
-        
+
     /** 
      * Show the homepage.
      *  
@@ -30,8 +43,8 @@ class HomeController extends BaseController
     public function getIndex() 
     {
         $images = $this->image->getAllPaginated();
-        // return \Response::make($image);
-        $this->view('home.index', compact('images'));
+        // return \Response::make($images);
+        return $this->base->view('home.index', compact('images'));
     } 
       
     /**
@@ -41,6 +54,6 @@ class HomeController extends BaseController
      */
     public function getAbout() 
     { 
-        $this->view('home.about');      
+      return $this->base->view('home.about');      
     } 
 } 

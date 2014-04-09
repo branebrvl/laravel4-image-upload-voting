@@ -1,6 +1,6 @@
-<?php namespace PhotoUpload\models\Presenters;
+<?php namespace PhotoUpload\Presenters;
 
-use PhotoUpload\models\User;
+use PhotoUpload\Models\User;
 use McCool\LaravelAutoPresenter\BasePresenter;
 
 class UserPresenter extends BasePresenter
@@ -8,7 +8,7 @@ class UserPresenter extends BasePresenter
   /**
    * Create a new UserPresenter instance.
    *
-   * @param  \PhotoUpload\models\User  $user
+   * @param  \PhotoUpload\Models\User  $user
    * @return void
    */
   public function __construct(User $user)
@@ -55,17 +55,19 @@ class UserPresenter extends BasePresenter
   }
 
   /**
-   * Get the user's avatar image.
-   *
+   * Get boolean represenation of blocked_at column.
+   * 
+   * 
    * @return string
    */
-  public function getPhotocssAttribute()
+  public function blockedAt()
   {
-    if($this->photo) {
-      return url('img/avatar/' . $this->photo);
+    if(is_null($this->resource->blocked_at))
+    {
+      return 0;
     }
 
-    return Gravatar::src($this->email, 100);
+    return 1;
   }
 
 }

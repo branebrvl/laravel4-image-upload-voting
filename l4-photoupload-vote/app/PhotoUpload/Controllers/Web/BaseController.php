@@ -1,38 +1,50 @@
 <?php namespace PhotoUpload\Controllers\Web;
 
-use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\View;
-use Illuminate\Support\Facades\Redirect;
-
-class BaseController extends Controller
+class BaseController
 {
     /**
-     * The layout used by the controller.
-     *
-     * @var \Illuminate\View\View
+     * Input data and HTTP Request methods 
+     * 
+     * @var \Illuminate\Http\Request
      */
-    protected $layout = 'layouts.main';
+    public $request;
+
+    /**
+     * Authentication service  
+     * 
+     * @var Illuminate\Auth\AuthManager
+     */
+    public $auth;
+
+    /**
+     * Redirector instance
+     * 
+     * @var Illuminate\Routing\Redirector
+     */
+    public $redirect;
+
+    /**
+     * View environment instance
+     * 
+     * @var /Illuminate\View\Environment
+     */
+    public $view;
 
     /**
      * Create a new BaseController instance.
      *
      * @return void
      */
-    public function __construct()
-    {
-        $this->beforeFilter('csrf', [ 'on' => 'post' ]);
-    }
-
-    /**
-     * Setup the layout used by the controller.
-     *
-     * @return void
-     */
-    protected function setupLayout()
-    {
-        if (! is_null($this->layout)) {
-            $this->layout = View::make($this->layout);
-        }
+    public function __construct(
+      \Illuminate\Http\Request $request,
+      \Illuminate\Auth\AuthManager $auth,
+      \Illuminate\Routing\Redirector $redirect,
+      \Illuminate\View\Environment $view
+    ) {
+        $this->request = $request;
+        $this->auth = $auth;
+        $this->redirect = $redirect;
+        $this->view = $view;
     }
 
     /**
@@ -40,11 +52,23 @@ class BaseController extends Controller
      *
      * @param  string  $path
      * @param  array  $data
-     * @return void
+     * @return Illuminate\View\View
      */
-    protected function view($path, $data = [])
+    public function view($path, $data = [])
     {
-        $this->layout->content = View::make($path, $data);
+        return $this->view->make($path, $data);
+    }
+
+
+    /**
+     * Return the Request instance.  
+     * 
+     * 
+     * @return \Illuminate\Http\Request
+     */
+    public function request()
+    {
+      return $this->request;
     }
 
     /**
@@ -55,9 +79,21 @@ class BaseController extends Controller
      * @param  array  $data
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectRoute($route, $params = [], $data = [])
+    public function redirectRoute($route, $params = [], $data = [])
     {
-        return Redirect::route($route, $params)->with($data);
+        return $this->redirect->route($route, $params)->with($data);
+    }
+
+    /**
+     * Redirect to the specified named route.
+     *
+     * @param  string  $path
+     * @param  array  $data
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function redirectTo($path, $data = [])
+    {
+        return $this->redirect->to($path)->with($data);
     }
 
     /**
@@ -66,9 +102,9 @@ class BaseController extends Controller
      * @param  array $data
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectBack($data = [])
+    public function redirectBack($data = [])
     {
-        return Redirect::back()->withInput()->with($data);
+        return $this->redirect->back()->withInput()->with($data);
     }
 
     /**
@@ -77,8 +113,8 @@ class BaseController extends Controller
      * @param  mixed $default
      * @return \Illuminate\Http\RedirectResponse
      */
-    protected function redirectIntended($default = null)
+    public function redirectIntended($default = null)
     {
-        return Redirect::intended($default);
+        return $this->redirect->intended($default);
     }
 }

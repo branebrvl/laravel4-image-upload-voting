@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title','Editing tag')
 
 @section('content')

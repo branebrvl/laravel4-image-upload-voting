@@ -9,8 +9,9 @@ use PhotoUpload\Validation\ValidationInterface;
  * @uses AbstractValidator
  * @uses ValidationInterface
  */
-class TagUploadValidator extends AbstractValidator implements ValidationInterface
+class TagValidator extends AbstractValidator implements ValidationInterface
 {
     protected $rules = [
+      'name' => 'required'
     ];
 }

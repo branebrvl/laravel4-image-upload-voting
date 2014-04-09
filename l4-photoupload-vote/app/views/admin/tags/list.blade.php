@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title','Viewing tags')
 
 @section('content')

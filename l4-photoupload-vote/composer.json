@@ -5,19 +5,25 @@
   "license": "MIT",
   "require": {
     "laravel/framework": "4.1.*",
-    "laracasts/utilities": "0.5",
     "intervention/image": "dev-master",
     "mccool/laravel-auto-presenter": "1.0.*",
     "league/oauth2-client": "dev-master",
     "thomaswelton/laravel-gravatar": "0.0.*"
   },
+
   "require-dev": {
     "way/generators": "dev-master",
     "phpunit/phpunit": "3.7.*",
     "itsgoingd/clockwork": "dev-master",
     "fzaninotto/faker": "dev-master",
-    "phpspec/phpspec": "dev-master"
+    "mockery/mockery": "dev-master",
+    "behat/behat": "2.5.*@stable",
+    "behat/mink": "1.5@stable",
+    "behat/mink-extension": "*",
+    "behat/mink-goutte-driver": "*",
+    "behat/mink-zombie-driver": "*"
   },
+  
   "autoload": {
     "classmap": [
    "app/commands",
@@ -29,6 +35,7 @@
       "PhotoUpload\\": "app/PhotoUpload"
     }
   },
+  
   "scripts": {
     "post-install-cmd": [
    "php artisan clear-compiled",
@@ -42,8 +49,10 @@
    "php artisan key:generate"
     ]
   },
+  
   "config": {
     "preferred-install": "dist"
   },
-  "minimum-stability": "stable"
+
+  "minimum-stability": "dev"
 }

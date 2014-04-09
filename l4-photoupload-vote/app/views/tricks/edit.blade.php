@@ -5,9 +5,9 @@
 @stop
 
 @section('scripts')
-	<script type="text/javascript" src="{{url('js/selectize/js/standalone/selectize.min.1.js')}}"></script>
+	<script type="text/javascript" src="{{url('js/selectize/js/standalone/selectize.min.js')}}"></script>
 	<script src="http://d1n0x3qji82z53.cloudfront.net/src-min-noconflict/ace.js"></script>
-	<script type="text/javascript" src="{{ asset('js/trick-new-edit.min.1.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('js/trick-new-edit.min.js') }}"></script>
 @stop
 
 @section('content')
@@ -49,15 +49,10 @@
 					    	{{Form::textarea('description',$trick->description, array('class'=>'form-control','placeholder'=>'Give detailed description of the trick','rows'=>'3'));}}
 					    </div>
 					    <div class="form-group">
-					      <label>Trick code: </label>
-					      <div id="editor-content" class="content-editor"></div>
-					      {{Form::textarea('code', $trick->code, ['id'=>'code-editor','style'=>'display:none;']);}}
+              {{HTML::image($trick->img_big)}}
 					    </div>
 					    <div class="form-group">
 					    	{{ Form::select('tags[]', $tagList, $selectedTags, array('multiple','id'=>'tags','placeholder'=>'Tag this trick','class' => 'form-control')); }}
-					    </div>
-					    <div class="form-group">
-					    	{{ Form::select('categories[]', $categoryList, $selectedCategories, array('multiple','id'=>'categories','placeholder'=>'Choose Categories for this trick','class' => 'form-control')); }}
 					    </div>
 					    <div class="form-group">
 					        <div class="text-right">

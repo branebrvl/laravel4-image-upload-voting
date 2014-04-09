@@ -2,7 +2,7 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom">
     <title>Laravel-Tricks</title>
-    <subtitle>Laravel tricks is a website that aggregates useful tips and tricks for Laravel PHP framework</subtitle>
+    <subtitle>Laravel images is a website that aggregates useful tips and images for Laravel PHP framework</subtitle>
     <link href="{{ Request::url() }}" rel="self" />
     <updated>{{ Carbon\Carbon::now()->toATOMString() }}</updated>
     <author>
@@ -15,13 +15,13 @@
     </author>
     <id>tag:{{ Request::getHost() }},{{ date('Y') }}:/feed.atom</id>
 
-@foreach($tricks as $trick)
+@foreach($images as $image)
     <entry>
-        <title>{{ $trick->title }}</title>
-        <link href="{{ route('tricks.show', $trick->slug) }}" />
-        <id>{{ $trick->tagUri }}</id>
-        <updated>{{ $trick->updated_at->toATOMString() }}</updated>
-        <summary>{{ $trick->description }}</summary>
+        <title>{{ $image->title }}</title>
+        <link href="{{ route('images.show', $image->slug) }}" />
+        <id>{{ $image->tagUri }}</id>
+        <updated>{{ $image->updated_at->toATOMString() }}</updated>
+        <summary>{{ $image->description }}</summary>
     </entry>
 @endforeach
 </feed>

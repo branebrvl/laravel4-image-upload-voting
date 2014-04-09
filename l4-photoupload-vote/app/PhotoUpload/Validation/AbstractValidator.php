@@ -58,7 +58,7 @@ abstract class AbstractValidator implements ValidationInterface
      * @param  array  $data
      * @return PhotoUpload\Validation\ValidationInterface
      */
-    final public function with(array $data)
+    public function with(array $data)
     {
         $this->data = $data;
 

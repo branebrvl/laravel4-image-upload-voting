@@ -9,13 +9,13 @@
         <language>en-us</language>
         <lastBuildDate>{{ Carbon\Carbon::now()->toRSSString() }}</lastBuildDate>
 
-@foreach($tricks as $trick)
+@foreach($images as $image)
         <item>
-            <title>{{ $trick->title }}</title>
-            <link>{{ route('tricks.show', $trick->slug) }}</link>
-            <guid>{{ route('tricks.show', $trick->slug) }}</guid>
-            <description><![CDATA[{{ $trick->description}}]]></description>
-            <pubDate>{{ $trick->created_at->toRSSString() }}</pubDate>
+            <title>{{ $image->title }}</title>
+            <link>{{ route('images.show', $image->slug) }}</link>
+            <guid>{{ route('images.show', $image->slug) }}</guid>
+            <description><![CDATA[{{ $image->description}}]]></description>
+            <pubDate>{{ $image->created_at->toRSSString() }}</pubDate>
         </item>
 @endforeach
     </channel>

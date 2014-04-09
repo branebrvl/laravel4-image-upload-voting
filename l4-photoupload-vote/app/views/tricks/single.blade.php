@@ -1,8 +1,11 @@
-@section('title', $trick->pageTitle)
-@section('description', $trick->pageDescription)
+@extends('layouts.main');
+
+@section('title', $image->pageTitle)
+
+@section('description', $image->pageDescription)
 
 @section('scripts')
-    <script src="{{ url('js/vendor/highlight.pack.1.js')}}"></script>
+    <script src="{{ url('js/vendor/highlight.pack.js')}}"></script>
     <script type="text/javascript">
     (function($) {
         hljs.tabReplace = '  ';
@@ -12,7 +15,7 @@
     </script>
     @if(Auth::check())
     <script>
-    (function(e){e(".js-like-trick").click(function(t){t.preventDefault();var n=e(this).data("liked")=="0";var r={_token:"{{ csrf_token() }}"};e.post('{{ route("tricks.like", $trick->slug) }}',r,function(t){if(t!="error"){if(!n){e(".js-like-trick .fa").removeClass("text-primary");e(".js-like-trick").data("liked","0");e(".js-like-status").html("Like this?")}else{e(".js-like-trick .fa").addClass("text-primary");e(".js-like-trick").data("liked","1");e(".js-like-status").html("You like this")}e(".js-like-count").html(t+" likes")}})})})(jQuery)
+    (function(e){e(".js-like-trick").click(function(t){t.preventDefault();var n=e(this).data("liked")=="0";var r={_token:"{{ csrf_token() }}"};e.post('{{ route("images.like", $image->slug) }}',r,function(t){if(t!="error"){if(!n){e(".js-like-trick .fa").removeClass("text-primary");e(".js-like-trick").data("liked","0");e(".js-like-status").html("Like this?")}else{e(".js-like-trick .fa").addClass("text-primary");e(".js-like-trick").data("liked","1");e(".js-like-status").html("You like this")}e(".js-like-count").html(t+" likes")}})})})(jQuery)
     </script>
     @endif
 @stop
@@ -22,40 +25,40 @@
         <div class="row">
             <div class="col-lg-9 col-md-8">
                 <div class="content-box">
-                    @if(Auth::check() && (Auth::user()->id == $trick->user_id))
+                    @if(Auth::check() && (Auth::user()->id == $image->user_id))
                         <div class="text-right">
                             <a data-toggle="modal" href="#deleteModal">Delete</a> |
-                            <a href="{{$trick->editLink}}">Edit</a>
-                            @include('tricks.delete',['link'=>$trick->deleteLink])
+                            <a href="{{$image->editLink}}">Edit</a>
+                            @include('tricks.delete',['link'=>$image->deleteLink])
                         </div>
                     @endif
                     <div class="trick-user">
                         <div class="trick-user-image">
-                            <img src="{{ $trick->user->photocss }}" class="user-avatar">
+                            <img src="{{ $image->user->photocss }}" class="user-avatar">
                         </div>
                         <div class="trick-user-data">
                             <h1 class="page-title">
-                                {{ $trick->title }}
+                                {{ $image->title }}
                             </h1>
                             <div>
-                                Submitted by <b><a href="{{ route('user.profile', $trick->user->username) }}">{{ $trick->user->username }}</a></b> - {{ $trick->timeago }}
+                                Submitted by <b><a href="{{ route('user.profile', $image->user->username) }}">{{ $image->user->username }}</a></b> - {{ $image->timeago }}
                             </div>
                         </div>
                     </div>
-                    <p>{{{ $trick->description }}}</p>
-                    <pre><code class="php">{{{ $trick->code }}}</code></pre>
+                    <p>{{{ $image->description }}}</p>
+                    {{HTML::image($image->img_big, 'render', ['id'=>'renderimg'])}}
                 </div>
             </div>
                 <div class="col-lg-3 col-md-4">
                     <div class="content-box">
                         <b>Stats</b>
                         <ul class="list-group trick-stats">
-                            <a href="#" class="list-group-item js-like-trick" data-liked="{{ $trick->likedByUser(Auth::user()) ? '1' : '0'}}">
+                            <a href="#" class="list-group-item js-like-trick" data-liked="{{ $image->likedByUser(Auth::user()) ? '1' : '0'}}">
 
-                                <span class="fa fa-heart @if($trick->likedByUser(Auth::user())) text-primary @endif"></span>
+                                <span class="fa fa-heart @if($image->likedByUser(Auth::user())) text-primary @endif"></span>
                                 @if(Auth::check())
                                 <span class="js-like-status">
-                                    @if($trick->likedByUser(Auth::user()))
+                                    @if($image->likedByUser(Auth::user()))
                                         You like this
                                     @else
                                         Like this?
@@ -63,31 +66,31 @@
                                 </span>
                                 <span class="pull-right js-like-count">
                                 @endif
-                                    {{ $trick->vote_cache }} {{ Str::plural('like', $trick->vote_cache) }}
+                                    {{ $image->vote_cache }} {{ Str::plural('like', $image->vote_cache) }}
                                 @if(Auth::check())</span>@endif
                             </a>
                             <li class="list-group-item">
-                                <span class="fa fa-eye"></span> {{ $trick->view_cache }} views
+                                <span class="fa fa-eye"></span> {{ $image->view_cache }} views
                             </li>
                         </ul>
-                        @if(count($trick->allCategories))
+                        @if(count($image->allCategories))
                             <b>Categories</b>
                             <ul class="nav nav-list push-down">
-                                @foreach($trick->allCategories as $category)
+                                @foreach($image->allCategories as $category)
                                     <li>
-                                        <a href="{{ route('tricks.browse.category', $category->slug) }}">
+                                        <a href="{{ route('images.browse.category', $category->slug) }}">
                                             {{ $category->name }}
                                         </a>
                                     </li>
                                 @endforeach
                             </ul>
                         @endif
-                        @if(count($trick->tags))
+                        @if(count($image->tags))
                             <b>Tags</b>
                             <ul class="nav nav-list push-down">
-                                @foreach($trick->tags as $tag)
+                                @foreach($image->tags as $tag)
                                     <li>
-                                        <a href="{{ route('tricks.browse.tag', $tag->slug) }}">
+                                        <a href="{{ route('images.browse.tag', $tag->slug) }}">
                                             {{ $tag->name }}
                                         </a>
                                     </li>
@@ -96,7 +99,7 @@
                         @endif
                         <div class="clearfix">
                             @if($prev)
-                                <a  href="{{ route('tricks.show', $prev->slug) }}"
+                                <a  href="{{ route('images.show', $prev->slug) }}"
                                     title="{{ $prev->title }}" data-toggle="tooltip"
                                     class="btn btn-sm btn-primary">
                                         &laquo; Previous Trick
@@ -104,7 +107,7 @@
                             @endif
 
                             @if($next)
-                                <a  href="{{ route('tricks.show', $next->slug) }}"
+                                <a  href="{{ route('images.show', $next->slug) }}"
                                     title="{{ $next->title }}" data-toggle="tooltip"
                                     class="btn btn-sm btn-primary pull-right">
                                         Next Trick &raquo;
@@ -119,7 +122,7 @@
                         <div id="disqus_thread"></div>
                         <script type="text/javascript">
                             var disqus_shortname = '{{ Config::get("config.disqus_shortname") }}';
-                            var disqus_identifier = '{{$trick->id}}';
+                            var disqus_identifier = '{{$image->id}}';
 
                             (function() {
                                 var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -135,7 +138,7 @@
 
         {{--<div class="row">
             <div class="col-lg-12">
-                <h2 class="title-between">Related tricks</h2>
+                <h2 class="title-between">Related images</h2>
             </div>
         </div>
         <div class="row">

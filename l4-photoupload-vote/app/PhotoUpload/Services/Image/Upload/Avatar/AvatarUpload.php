@@ -14,7 +14,7 @@ class AvatarUpload extends AbstractUpload implements ImageUploadInterface {
    */
   protected function getPath()
   {
-   return $this->config('image.avatar_path');
+   return $this->config->get('image.avatar_path_tmp');
   }
 
   /**
@@ -25,6 +25,6 @@ class AvatarUpload extends AbstractUpload implements ImageUploadInterface {
    */
   protected function getSize()
   {
-    return $this->config('image.avatar_width');
+    return $this->config->get('image.avatar_width');
   }
 }

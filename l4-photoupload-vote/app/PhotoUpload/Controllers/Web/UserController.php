@@ -1,14 +1,13 @@
 <?php namespace PhotoUpload\Controllers\Web;
 
-use ImageUpload;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Response;
+use ImageUpload;
 use PhotoUpload\Repositories\Image\ImageRepositoryInterface;
 use PhotoUpload\Repositories\User\UserRepositoryInterface;
+use PhotoUpload\Services\Image\Upload\Avatar\AvatarUpload;
+use PhotoUpload\Repositories\User\UpdateSettingsValidator;
 
-class UserController extends BaseController
+class UserController extends WebController
 {
     /**
      * Trick repository.
@@ -39,21 +38,45 @@ class UserController extends BaseController
     protected $avatarUpload;
 
     /**
+     * validator 
+     * 
+     * @var mixed
+     */
+    protected $validator;
+
+    /**
+     * BaseController 
+     * 
+     * @var PhotoUpload\Controllers\Web
+     */
+    protected $base;
+    
+    /**
      * Create a new UserController instance.
      *
      * @param \PhotoUpload\Repositories\Image\ImageRepositoryInterface  $images
      * @param \PhotoUpload\Repositories\User\UserRepositoryInterface  $users
+     * @param \PhotoUpload\Services\Image\Upload\Avatar\AvatarUpload $avatarUpload
+     * @param \PhotoUpload\Repositories\User\UpdateSettingsValidator $validator
+     * @param \PhotoUpload\Controllers\Web $base
      */
-    public function __construct(ImageRepositoryInterface $images, UserRepositoryInterface $users, AvatarUpload $avatarUpload)
-    {
-        parent::__construct();
+    public function __construct(
+      ImageRepositoryInterface $images,
+      UserRepositoryInterface $users, 
+      AvatarUpload $avatarUpload, 
+      UpdateSettingsValidator $validator,
+      BaseController $base
+    ) {
+      parent::__construct();
 
-        $this->beforeFilter('auth', [ 'except' => 'getPublic' ]);
+      $this->beforeFilter('auth', [ 'except' => 'getPublic' ]);
 
-        $this->user   = Auth::user();
-        $this->images = $images;
-        $this->users  = $users;
-        $this->avatarUpload = $avatarUpload;
+      $this->user = $base->auth->user();
+      $this->images = $images;
+      $this->users  = $users;
+      $this->avatarUpload = $avatarUpload;
+      $this->validator = $validator;
+      $this->base = $base;
     }
 
     /**
@@ -65,7 +88,7 @@ class UserController extends BaseController
     {
         $images = $this->images->getAllByUser($this->user, 12);
 
-        $this->view('user.profile', compact('images'));
+        return $this->base->view('user.profile', compact('images'));
     }
 
     /**
@@ -75,7 +98,7 @@ class UserController extends BaseController
      */
     public function getSettings()
     {
-        $this->view('user.settings');
+        return $this->base->view('user.settings');
     }
 
     /**
@@ -87,7 +110,7 @@ class UserController extends BaseController
     {
         $images = $this->images->getAllFavorites($this->user);
 
-        $this->view('user.favorites', compact('images'));
+        return $this->base->view('user.favorites', compact('images'));
     }
 
     /**
@@ -97,28 +120,33 @@ class UserController extends BaseController
      */
     public function postSettings()
     {
-        $form = $this->users->getSettingsForm();
+      $input = $this->base
+                    ->request
+                    ->only(['username', 'email', 'password', 'password_confirmation', 'avatar']);
 
-        if (! $form->isValid()) {
-            return $this->redirectBack([ 'errors' => $form->getErrors() ]);
+        if ($this->validator->with($input)->fails()) 
+        {
+          return $this->base
+                      ->redirectBack([ 'errors' => $this->validator->errors() ]);
         }
 
-        $this->users->updateSettings($this->user, Input::all());
+        $this->users->updateSettings($this->user, $input);
 
-        return $this->redirectRoute('user.settings', [], [ 'settings_updated' => true ]);
+        return $this->base
+                    ->redirectRoute('user.settings', [], [ 'settings_updated' => true ]);
     }
 
     /**
      * Handle the avatar upload.
      *
-     * @return \Illuminate\Http\RedirectResponse
+     * @return \Illuminate\Http\Response
      */
     public function postAvatar()
     {
-        $upload = $this->avatarUpload->handle(Input::file('filedata'));
+        $upload = $this->avatarUpload->handle($this->base->request->file('filedata'));
 
         if ($upload->succeeds()) {
-            return Response::json($upload->getJsonBody(), 200);
+          return Response::json($upload->getJsonBody(), 200);
         }
 
         return Response::json('error', 400);
@@ -132,9 +160,9 @@ class UserController extends BaseController
      */
     public function getPublic($username)
     {
-        $user   = $this->users->requireByUsername($username);
-        $images = $this->images->getAllForUser($user);
+        $user = $this->users->requireByUsername($username);
+        $images = $this->images->getAllByUser($user);
 
-        $this->view('user.public', compact('user', 'images'));
+        return $this->base->view('user.public', compact('user', 'images'));
     }
 }

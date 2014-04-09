@@ -1,8 +1,8 @@
-<?php namespace PhotoUpload\Service\Image\Manipulation;
+<?php namespace PhotoUpload\Services\Image\Manipulation;
                                
 use Illuminate\Support\ServiceProvider;
-use Intervention\Image\Facades\Image;
-use PhotoUpload\Service\Image\Manipulation\Intervention\ImageManip;
+use Intervention\Image\Image;
+use PhotoUpload\Services\Image\Manipulation\Intervention\ImageManip;
 
 class ImageManipServiceProvider extends ServiceProvider {
 
@@ -13,7 +13,7 @@ class ImageManipServiceProvider extends ServiceProvider {
      */
     public function register() 
     {
-      $this->app->bind( 'PhotoUpload\Service\Image\Manipulation\ImageManipInterface', function()
+      $this->app->bind( 'PhotoUpload\Services\Image\Manipulation\ImageManipInterface', function($app)
       {
          return new ImageManip(new Image);
       });

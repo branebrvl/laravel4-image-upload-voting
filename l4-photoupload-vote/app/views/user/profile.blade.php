@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title','Profile')
 
 @section('content')
@@ -6,7 +8,7 @@
 	  <div class="alert alert-success alert-dismissable text-center">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
 		<h4>Welcome to Laravel tricks!</h4>
-		<p>Explore the tricks, create and share some of your own!</p>
+		<p>Explore the renders, create and share some of your own!</p>
 	  </div>
 	@endif
 
@@ -19,13 +21,13 @@
 
 	<div class="row push-down">
 		<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-			<h1 class="page-title">My tricks </h1>
+			<h1 class="page-title">My renders </h1>
 		</div>
 		<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 text-right">
-			<a href="{{ url('user/tricks/new')}}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Create new</a>
+			<a href="{{ url('user/images/new')}}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Create new</a>
 		</div>
 	</div>
 
-	@include('tricks.grid', [ 'tricks' => $tricks ])
+	@include('tricks.grid', [ 'images' => $images ])
 </div>
 @stop

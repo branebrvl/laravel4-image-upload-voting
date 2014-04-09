@@ -17,7 +17,7 @@ class CreateVotesTable extends Migration {
 			$table->integer('user_id')->unsigned();
 			$table->integer('image_id')->unsigned();
 			$table->integer('vote')->default(1);
-			$table->boolean('notification');
+			$table->boolean('notification')->default(0);
 			$table->timestamps();
 
       $table->foreign('user_id')

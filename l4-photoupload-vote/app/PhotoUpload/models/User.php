@@ -12,7 +12,7 @@ class User extends Model implements UserInterface, RemindableInterface {
    *
    * @var string
    */
-  public $presenter = '\PhotoUpload\Presenters\UserPresenter';
+  public $presenter = 'PhotoUpload\Presenters\UserPresenter';
 
 	/**
 	 * The database table used by the model.
@@ -101,6 +101,20 @@ class User extends Model implements UserInterface, RemindableInterface {
   public function isAdmin()
   {
     return ($this->admin == true);
+  }
+
+  /**
+   * Get the user's avatar image.
+   *
+   * @return string
+   */
+  public function getPhotocssAttribute()
+  {
+    if($this->photo) {
+      return url(\Config::get('image.avatar_folder') . '/' . $this->photo);
+    }
+
+    return \Gravatar::src($this->email, 100);
   }
 
   /**

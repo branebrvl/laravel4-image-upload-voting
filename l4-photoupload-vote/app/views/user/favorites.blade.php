@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title','My Favorites')
 
 @section('content')
@@ -11,6 +13,6 @@
             </div>
         </div>
 
-        @include('tricks.grid', ['tricks' => $tricks])
+        @include('tricks.grid', ['images' => $images])
     </div>
 @stop

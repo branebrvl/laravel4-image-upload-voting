@@ -1,4 +1,4 @@
-<?php namespace PhotoUpload\Repositories;
+<?php namespace PhotoUpload\Repositories\Tag;
 
 interface TagRepositoryInterface
 {

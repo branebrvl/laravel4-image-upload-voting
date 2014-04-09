@@ -1,7 +1,7 @@
 <?php namespace PhotoUpload\Events;
 
 use Illuminate\Session\Store;
-use PhotoUpload\Repositories\ImageRepositoryInterface;
+use PhotoUpload\Repositories\Image\ImageRepositoryInterface;
 
 class ViewImageHandler
 {

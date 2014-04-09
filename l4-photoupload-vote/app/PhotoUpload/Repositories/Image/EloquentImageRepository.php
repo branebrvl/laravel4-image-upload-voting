@@ -1,9 +1,12 @@
 <?php namespace PhotoUpload\Repositories\Image;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Config\Repository as Config;
 use PhotoUpload\Repositories\AbstractRepository;
 use PhotoUpload\Models\Image;
 use PhotoUpload\Models\User;
+use PhotoUpload\Services\Image\Upload\Render\RenderThumbUpload;
 
 class EloquentImageRepository extends AbstractRepository implements ImageRepositoryInterface {
   
@@ -12,17 +15,42 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * 
    * @var mixed
    */
-  private $model;
+  protected $model;
+
+  /**
+   * config 
+   * 
+   * @var mixed
+   */
+  protected $config;
+
+  /**
+   * filesysteml 
+   * 
+   * @var mixed
+   */
+  protected $filesysteml;
+
+  /**
+   * renderThumbUpload 
+   * 
+   * @var mixed
+   */
+  protected $renderThumbUpload;
 
   /**
    * Create a new EloquentImageRepository instance.
    *
-   * @param  \PhotoUpload\Models\Tag $tags
+   * @param  \Illuminate\Database\Eloquent\Model $model
+   * @param \Illuminate\Filesystem\Filesystem  $filesystem
    * @return void
    */
-  function __construct(Model $model)
+  function __construct(Model $model, Filesystem $filesystem, Config $config, RenderThumbUpload $renderThumbUpload)
   {
     $this->model = $model;
+    $this->filesystem = $filesystem;
+    $this->config = $config;
+    $this->renderThumbUpload = $renderThumbUpload;
   }
 
   /**
@@ -31,40 +59,46 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * @param mixed $id id 
    * @param int $perPage perPage 
    * 
-   * @return void
+   * @return \Illuminate\Pagination\Paginator
    */
   public function getAllByUser(User $user, $perPage = 9)
   {
-    $images = $user->images()
+    $images = $user
+                  ->images()
+                  // ->with('tags','users.images')
                   ->orderBy('created_at', 'DESC')
-                  ->paginate($perPage);
+                  ->paginate($perPage) 
+                  // ->get()
+                  ;
+
     return $images;
   }
 
   /**     
    * Find all images that are favorited by the given user paginated.
    *      
-   * @param  \PhotoUpload\Repositories\User $user
+   * @param  \PhotoUpload\Models\User $user
    * @param  integer $perPage
    * @return \Illuminate\Pagination\Paginator
    */   
   public function getAllFavorites(User $user, $perPage = 9)
   {     
-      $images = $user->votes()->orderBy('created_at', 'DESC')->paginate($perPage);
-        
+    $images = $user->votes()
+                   ->orderBy('created_at', 'DESC')
+                   ->paginate($perPage);
+
       return $images;        
   }
 
   /**
    * Increment the view count on the given image.
    * 
-   * @param mixed $id id 
+   * @param PhotoUpload\Models\Image $image
    * 
-   * @return void
+   * @return PhotoUpload\Models\Image
    */
-  public function incrementViews($id)
+  public function incrementViews(\Illuminate\Database\Eloquent\Model $image)
   {     
-      $image = $this->model->find($id);
       $image->view_cache = $image->view_cache + 1;        
       $image->save();
         
@@ -80,7 +114,12 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    */
   public function getAllPaginated($perPage = 9)
   {
-      $images = $this->model->orderBy('created_at', 'DESC')->paginate($perPage);
+    $images = $this->model
+                    ->whereHas('user', function ($query) {
+                        $query->whereNULL('blocked_at');   
+                    })                         
+                   ->orderBy('created_at', 'DESC')
+                   ->paginate($perPage);
 
       return $images;
   }
@@ -94,7 +133,31 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    */
   public function getMostRecent($perPage =9)
   {
-    return $this->getAllPaginated($per_page);
+    return $this->getAllPaginated($perPage);
+  }
+
+  /** 
+   * Find an image by the given slug.
+   * 
+   * @param  string $slug 
+   * @return \PhotoUpload\Models\Image
+   */
+  public function getBySlug($slug) 
+  { 
+    return $this->model
+                ->whereSlug($slug)
+                ->first(); 
+  }
+
+  /**
+   * Get a list of tag ids that are associated with the given image.
+   *
+   * @param  \PhotoUpload\Models\Image $image
+   * @return array
+   */
+  public function listTagsIdsForImage(Image $image)
+  {
+      return $image->tags->lists('id');
   }
 
   /**
@@ -118,7 +181,6 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    */
   public function getMostCommented($perPage =9)
   {
-
   }
 
   /**
@@ -130,7 +192,19 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    */
   public function getNextImage(Image $image)
   {
+    $next = $this->model
+                  ->whereHas('user', function ($query) {
+                      $query->whereNULL('blocked_at');   
+                  })                         
+                  ->where(function($query) use($image)
+                  {
+                    $query->where('created_at', '>=', $image->created_at)
+                          ->where('id', '<>', $image->id); 
+                  })
+                  ->orderBy('created_at', 'asc')  
+                  ->first([ 'slug', 'title' ]);   
 
+    return $next; 
   }
 
   /**
@@ -142,7 +216,19 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    */
   public function getPreviousImage(Image $image)
   {
+    $prev = $this->model
+                  ->whereHas('user', function ($query) {
+                      $query->whereNULL('blocked_at');   
+                  })                         
+                  ->where(function($query) use($image)
+                  {
+                    $query->where('created_at', '<=', $image->created_at)
+                          ->where('id', '<>', $image->id); 
+                  })
+                  ->orderBy('created_at', 'desc') 
+                  ->first([ 'slug', 'title' ]);   
 
+    return $prev; 
   }
 
   /**
@@ -167,6 +253,40 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
   }
 
   /**
+   * Find all images that match the given search term.
+   *  
+   * @param  string $term                        
+   * @param  integer $perPage                    
+   * @return \Illuminate\Pagination\Paginator
+   */
+  public function searchByTermPaginated($term, $perPage = 12)
+  {
+    $tricks = $this->model                    
+                  ->whereHas('user', function ($query) 
+                  {
+                    $query->whereNULL('blocked_at');   
+                  })                         
+                  ->where(function($query) use($term)
+                  {
+                    $query->orWhere('title', 'LIKE', '%'.$term.'%')           
+                          ->orWhere('description', 'LIKE', '%'.$term.'%')     
+                          ->orWhereHas('tags', function ($query) use ($term) 
+                          {
+                            $query->where('slug', 'LIKE', '%' . $term . '%');   
+                          })
+                          ->orWhereHas('tags', function ($query) use ($term) 
+                          {
+                            $query->where('name', 'LIKE', '%' . $term . '%');   
+                          });
+                  })
+                  ->orderBy('created_at', 'desc')                     
+                  ->orderBy('title', 'asc')  
+                  ->paginate($perPage);      
+
+      return $tricks;
+  }  
+
+  /**
    * store 
    * 
    * @param array $data data 
@@ -175,32 +295,54 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    */
   public function store(array $data)
   { 
-      //$image->user_id = $data['user_id'];      
-      $data = [
-        title => $data['title'],
-        slug => $data['title'],
-        description => $data['description'],
-      ];
+    $imgMin = '';
+    $tags = $data['tags'];
+
+    $imgBigTmpPath = $this->config->get('image.upload_path_tmp') . '/' .$data['render'];
+    $imgBigPath = $this->config->get('image.upload_path') . '/' . $data['render'];
+    $this->filesystem->move($imgBigTmpPath, $imgBigPath);
+    $this->renderThumbUpload->handle($imgBigPath); 
+
+    if($this->renderThumbUpload->succeeds())
+    {
+      $imgMin = $this->renderThumbUpload->getJsonBody()['images']['path'];
+    }
+
+    $data = [
+      'user_id' => $data['user_id'],
+      'title' => $data['title'],
+      'slug' => $data['title'],
+      'description' => $data['description'],
+      'img_big' => $imgBigPath,
+      'img_min' => $imgMin, 
+    ];
+
+    $image = $this->model->create($data);
+    $image->tags()->sync($tags);       
     
-      $image = $this->model->create($data);
-      $image->tags()->sync($data['tags']);       
-    
-      return $image; 
+    return $image; 
   }
 
-  /**
-   * update 
-   * 
-   * @param mixed $id id 
-   * @param array $data data 
-   * 
-   * @return void
-   */
-  public function update($id, array $data)
-  {
-      return $this->getById($id)->update($data);  
-  }
-
+    /**     
+     * Update the trick in the database.                                                                              
+     *      
+     * @param  \Tricks\Trick $trick
+     * @param  array $data                                                                                            
+     * @return \Tricks\Trick                                                                                          
+     */                                                                                                               
+    public function edit(Image $image, array $data)                                                                   
+    {
+        //$trick->user_id = $data['user_id'];
+        $image->title       = $data['title'];                                                                      
+        $image->slug        = $data['title'];                                                         
+        $image->description = $data['description'];                                                                
+    
+        $image->save();
+                                                                                                                      
+        $image->tags()->sync($data['tags']);
+                                                                                                                      
+        return $image;
+    } 
   /**
    * getVotes 
    * 

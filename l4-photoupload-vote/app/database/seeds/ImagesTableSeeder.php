@@ -18,15 +18,12 @@ class ImagesTableSeeder extends Seeder {
         'title' => e($sentence),
         'slug' => Str::slug($sentence, '-'),
         'description' => e($faker->paragraph(4)),
-        'img_init_min' => $faker->imageUrl(60, 80, 'abstract'),
-        'img_init_big' => $faker->imageUrl(120, 140, 'abstract'),
-        'img_final_min' => $faker->imageUrl(60, 80, 'technics'),
-        'img_final_big' => $faker->imageUrl(120, 140, 'technics'),
-        'ip' => $faker->ipv4(),
+        'img_min' => $faker->imageUrl(60, 80, 'abstract'),
+        'img_big' => $faker->imageUrl(120, 140, 'abstract'),
         'show' => 1,
         'user_id' => $faker->randomElement($usersIds),
-        'created_at' => new DateTime,
-        'updated_at' => new DateTime
+        'created_at' => $faker->dateTimeThisYear(),
+        'updated_at' => $faker->dateTimeThisYear()
       ]);
     }
 	}

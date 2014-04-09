@@ -1,24 +1,73 @@
 <?php namespace PhotoUpload\Controllers\Web;
 
 use PhotoUpload\Repositories\Image\ImageRepositoryInterface;
+use PhotoUpload\Repositories\Tag\TagRepositoryInterface;
 
-class BrowseController extends BaseController
+class BrowseController extends WebController
 {
 
     /**
      * Image repository.
      *
      */
-    protected $image;
+    protected $images;
 
+    /**
+     * Tag repository.
+     * 
+     */
+    protected $tags;
+
+    /**
+     * BaseController 
+     * 
+     * @var PhotoUpload\Controllers\Web
+     */
+    protected $base;
+    
     /**
      * Create a new BrowseController instance.
      *
      * @return void
      */
-    public function __construct( ImageRepositoryInterface $image) 
+    public function __construct(
+      ImageRepositoryInterface $images, 
+      TagRepositoryInterface $tags,
+      BaseController $base
+    ) { 
+      parent::__construct();
+
+      $this->images = $images;
+      $this->tags = $tags;
+      $this->base = $base;
+    }
+
+    /**
+     * Show the tags index.    
+     *
+     * @return \Response
+     */
+    public function getTagIndex()   
     {
-        $this->image = $image;
+        $tags = $this->tags->getAllWithImageCount();
+
+        return $this->base->view('browse.tags', compact('tags'));
+    } 
+        
+    /** 
+     * Show the browse by tag page.
+     *  
+     * @param  string  $tag    
+     * @return \Response
+     */ 
+    public function getBrowseTag($tag)
+    {   
+        list($tag, $images) = $this->tags->getImagesByTag($tag); 
+        
+        $type = 'Tag "'.$tag->name.'"';
+        $pageTitle = 'Browsing Tag "' . $tag->name . '"';
+    
+        return $this->base->view('browse.index', compact('images', 'type', 'pageTitle'));
     }
 
     /**
@@ -28,12 +77,12 @@ class BrowseController extends BaseController
      */
     public function getBrowseRecent()
     {
-        $image = $this->image->findMostRecent();
+        $images = $this->images->getMostRecent();
 
-        $type      = 'Recent';
+        $type = 'Recent';
         $pageTitle = 'Browsing Most Recent Photos';
 
-        $this->view('browse.index', compact('image', 'type', 'pageTitle'));
+        return $this->base->view('browse.index', compact('images', 'type', 'pageTitle'));
     }
 
     /**
@@ -43,26 +92,26 @@ class BrowseController extends BaseController
      */
     public function getBrowsePopular()
     {
-        $image = $this->image->findMostPopular();
+        $images = $this->images->findMostPopular();
 
-        $type      = 'Popular';
+        $type = 'Popular';
         $pageTitle = 'Browsing Most Popular Photos';
 
-        $this->view('browse.index', compact('image', 'type', 'pageTitle'));
+        return $this->base->view('browse.index', compact('images', 'type', 'pageTitle'));
     }
 
     /**
-     * Show the browse most commented image page.
+     * Show the browse most commented images page.
      *
      * @return \Response
      */
     public function getBrowseComments()
     {
-        $image = $this->image->findMostCommented();
+        $images = $this->images->findMostCommented();
 
-        $type      = 'Most commented';
+        $type = 'Most commented';
         $pageTitle = 'Browsing Most Commented Photos';
 
-        $this->view('browse.index', compact('image', 'type', 'pageTitle'));
+        return $this->base->view('browse.index', compact('images', 'type', 'pageTitle'));
     }
 }

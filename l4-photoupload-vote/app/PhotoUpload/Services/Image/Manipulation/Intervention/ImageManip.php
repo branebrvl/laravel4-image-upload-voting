@@ -1,6 +1,7 @@
 <?php namespace PhotoUpload\Services\Image\Manipulation\Intervention;
 
-use Intervention\Image\Facades\Image;
+use Intervention\Image\Image;
+use PhotoUpload\Services\Image\Manipulation\ImageManipInterface;
 /**
  * 
  */
@@ -12,7 +13,6 @@ class ImageManip implements ImageManipInterface
   protected $errors = []; 
 
   protected $succeeds = false;
-
 
   public function __construct(Image $image)
   {
@@ -29,21 +29,21 @@ class ImageManip implements ImageManipInterface
       return $this->errors;  
   }
 
-  final public function succeeds()  
+  public function succeeds()  
   {
       return $this->succeeds;  
   }
 
   public function make($path)
   {
-    $this->image->make($path);
+    $this->image = $this->image->make($path);
 
     return $this;
   }
 
-  public function save($path)
+  public function save($path, $quality)
   {
-    $this->image->save($path);
+    $this->image->save($path, $quality);
 
     return $this;
   }
@@ -52,7 +52,7 @@ class ImageManip implements ImageManipInterface
   {
     try
     {
-      $this->image->resize($width, $height, true);
+      $this->image->resize($width, $height, true, false);
       $this->succeeds = true;
     } 
 

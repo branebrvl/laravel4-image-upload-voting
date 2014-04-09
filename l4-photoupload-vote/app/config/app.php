@@ -109,11 +109,16 @@ return array(
 
  		'Way\Generators\GeneratorsServiceProvider',
  		'Clockwork\Support\Laravel\ClockworkServiceProvider',
-    'Laracasts\Utilities\UtilitiesServiceProvider',
+
+    'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider',
+    'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
+
     'PhotoUpload\Repositories\RepoServiceProvider',
     'PhotoUpload\Services\Navigation\NavigationServiceProvider',
     'PhotoUpload\Events\EventServiceProvider',
-    'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
+    'PhotoUpload\Exceptions\ExceptionServiceProvider',
+    'PhotoUpload\Services\Image\Manipulation\ImageManipServiceProvider',
+    'PhotoUpload\Controllers\Web\ControllersServiceProvider',
 	),
 
 	/*
@@ -179,9 +184,9 @@ return array(
 		'URL'             => 'Illuminate\Support\Facades\URL',
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
-    'Navigation'      => 'PhotoUpload\Services\Navigation\Facades\Navigatione',
 
-    'Gravatar' => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
+    'Navigation'      => 'PhotoUpload\Services\Navigation\Facades\Navigatione',
+    'Gravatar'        => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 
 	),
 

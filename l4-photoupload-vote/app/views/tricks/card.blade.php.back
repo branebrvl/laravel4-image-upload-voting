@@ -1,0 +1,14 @@
+<div href="#" class="trick-card col-lg-4 col-md-6 col-sm-6 col-xs-12">
+	<div class="trick-card-inner js-goto-trick" data-slug="{{ $image->ip}}">
+		<a class="trick-card-title" href="{{  $image->id}}">
+		<img src="{{{ $image->img_init_big}}}" alt="">
+		</a>
+    <div class="trick-card-stats trick-card-by">by <b><a href="{{-- route('user.profile', $image->user->username) --}}">{{-- $image->user->username --}}</a></b></div>
+    <div class="trick-card-stats clearfix">                                                                                         
+      <div class="trick-card-timeago">Submitted {{-- $image->timeago --}} {{-- $trick->categories --}}</div>                                
+      <div class="trick-card-stat-block"><span class="fa fa-eye"></span> {{-- $image->view_cache --}}</div>                               
+      <div class="trick-card-stat-block text-center"><span class="fa fa-comment"></span> <a href="{{ url('image/'.$image->slug.'#disqus_thread') }}" data-disqus-identifier="{{$image->id}}" style="color: #777;">0</a></div>
+      <div class="trick-card-stat-block text-right"><span class="fa fa-heart"></span> {{-- $image->vote_cache --}}</div>
+    </div>
+	</div>
+</div>

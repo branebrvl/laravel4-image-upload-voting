@@ -18,7 +18,7 @@ class UsersTableSeeder extends Seeder {
       'updated_at' => new DateTime
     ]);
 
-    foreach(range(1,10) as $itme)
+    foreach(range(1,9) as $itme)
     {
       DB::table('users')->insert([
         'email' => $faker->email,

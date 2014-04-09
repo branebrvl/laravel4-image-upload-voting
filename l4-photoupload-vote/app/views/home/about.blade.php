@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title','About Laravel-Tricks website')
 
 @section('content')

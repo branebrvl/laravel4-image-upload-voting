@@ -1,10 +1,15 @@
 <?php namespace PhotoUpload\Services\Image\Upload;
 
+use Illuminate\Filesystem\Filesystem; 
+use Illuminate\Config\Repository as Config;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use PhotoUpload\Services\Image\Manipulation\ImageManipInterface;
+use PhotoUpload\Utilities\Helpers;
+
 /**
  * ImageUpload 
  * 
  * @uses ImageUploadInterface
- * @author Branislav Vladisavljev 
  */
 class AbstractUpload implements ImageUploadInterface {
 
@@ -58,6 +63,13 @@ class AbstractUpload implements ImageUploadInterface {
   protected $quality = 65;
 
   /**
+   * ImageManip wraper for Intervention package.
+   * 
+   * @var  \PhotoUpload\Services\Image\Manipulation\Intervention\ImageManip
+   */
+  public $imageManip;
+
+  /**
   * Filesystem instance.
   *
   * @var \Illuminate\Filesystem\Filesystem      
@@ -67,21 +79,30 @@ class AbstractUpload implements ImageUploadInterface {
   /**
   * Config instance.
   *
-  * @var \Illuminate\Config
+  * @var \Illuminate\Config\Repository
   */
   protected $config;  
 
+  protected $helpers;
+
   /**
-  * Create a new ImageUploadService instance.   
+  * Create a new AbstractUpload instance.   
   *
+   * @param \PhotoUpload\Services\Image\Manipulation\Intervention\ImageManip $imageManip
   * @param  \Illuminate\Filesystem\Filesystem  $filesystem
-  * @param  \Illuminate\Config $config
+  * @param  \Illuminate\Config\Repository $config
   * @return void
   */
-  public function __construct(Filesystem $filesystem, Config $config) 
-  {
-      $this->filesystem = $filesystem;           
-      $this->config = $config;
+  public function __construct(
+    ImageManipInterface $imageManip, 
+    Filesystem $filesystem, 
+    Config $config, 
+    Helpers $helpers
+  ) {
+    $this->imageManip = $imageManip;
+    $this->filesystem = $filesystem;           
+    $this->config = $config;
+    $this->helpers = $helpers;
   }
 
   /**
@@ -117,6 +138,11 @@ class AbstractUpload implements ImageUploadInterface {
     return $this->size;
   }
 
+  public function setSize($size)
+  {
+    $this->size = $size;
+  }
+
   /**
    * Get size for image mainupulation resize action. 
    * 
@@ -128,15 +154,20 @@ class AbstractUpload implements ImageUploadInterface {
     return $this->path;
   }
 
+  public function setPath($path)
+  {
+    $this->path = $path;
+  }
+
   /**
    * Get the full path from the given partial path.
    *
    * @param  string  $path
    * @return string
    */
-  protected function getFullPath($path)
+  public function getFullPath($path)
   {
-      return public_path() . '/' . $path;
+      return $this->helpers->getPublicPath() . '/' . $path;
   }
 
   /**
@@ -144,9 +175,9 @@ class AbstractUpload implements ImageUploadInterface {
    *
    * @return string
    */
-  protected function makeFilename()
+  public function makeFilename()
   {
-      return sha1(time() . time()) . ".{$this->extension}";
+      return $this->helpers->getRandomName() . ".{$this->extension}";
   }
 
   /**
@@ -200,25 +231,25 @@ class AbstractUpload implements ImageUploadInterface {
   /**
    * handle 
    * 
-   * @param UploadedFile $image image 
+   * @param Symfony\Component\HttpFoundation\File\UploadedFile $image 
    * 
    * @return void
    */
-  public function handle(UploadedFile $image)
+  public function handle($image)
   {
     $filename = $this->makeFilename();
-    $path = getSize() . '/' . $filename;
+    $path = $this->getPath() . '/' . $filename;
 
     //These parameters are related to the image processing class that we've included, not really related to Laravel
     $this->imageManip->make($image->getRealPath())
-                     ->resize(getSize(), null)
-                     ->save(getPath(), $this->quality);
+                     ->resize($this->getSize(), $this->getSize())
+                     ->save($path, $this->quality);
 
     $this->succeeds = $this->imageManip->succeeds();
     
     if($this->succeeds) 
     {
-      $this->setJsonBody($filename, $this->getMimeType(), $path);
+      $this->setJsonBody($filename, $image->getMimeType(), $path);
     } else {
       $this->errors = $this->imageManip->errors();
     }

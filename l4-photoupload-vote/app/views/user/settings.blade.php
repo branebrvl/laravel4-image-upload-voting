@@ -1,13 +1,16 @@
+@extends('layouts.main')
+  
 @section('title','Settings')
 
 @section('styles')
-<link rel="stylesheet" href="{{ URL::asset('css/jquery.Jcrop.min.1.css') }}">
+<link rel="stylesheet" href="{{ URL::asset('css/jquery.Jcrop.min.css') }}">
 @stop
 
 @section('scripts')
 <script type="text/javascript">
   var FileAPI = {
-          debug: false
+          cors: false,
+          debug: true
           , staticPath: "{{ url('js/vendor/uploader') }}/"
           , postNameConcat: function (name, idx){
         return  name + (idx != null ? '['+ idx +']' : '');
@@ -62,6 +65,7 @@ jQuery(function ($){
     onComplete: function(evt, xhr)
      {
       try {
+        console.log(evt, xhr);
         var result = FileAPI.parseJSON(xhr.xhr.responseText);
         $('#avatar-hidden').attr("value",result.images.filename);
       } catch (er){

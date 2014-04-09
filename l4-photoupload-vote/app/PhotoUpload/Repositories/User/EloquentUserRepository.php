@@ -1,15 +1,72 @@
 <?php namespace PhotoUpload\Repositories\User;
 
-use PhotoUpload\Repositories\AbstractRepository;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Filesystem\Filesystem; 
+use Illuminate\Config\Repository as Config;
+use PhotoUpload\Repositories\AbstractRepository;
+use PhotoUpload\Models\User;
+use PhotoUpload\Exceptions\UserNotFoundException;
 
 class EloquentUserRepository extends AbstractRepository implements UserRepositoryInterface {
 
-  private $model;
+  /**
+   * Model instance
+   * 
+   * @var \Illuminate\Config
+   */
+  protected $model;
 
-  function __construct(Model $model)
+  /**
+   * Filesystem instance.    
+   *
+   * @var \Illuminate\Filesystem\Filesystem
+   */
+  protected $filesystem;
+
+  /**
+   * Config instance.    
+   *
+   * @var \Illuminate\Config
+   */
+  protected $config;
+
+  /**
+  * Create a new EloquentUserRepository instance.   
+  *
+  * @param \Illuminate\Database\Eloquent\Model $model
+  * @param \Illuminate\Filesystem\Filesystem  $filesystem
+  * @param \Illuminate\Config\Repsitory $config
+  * @return void
+  */
+  function __construct(Model $model, Filesystem $filesystem, Config $config)
   {
     $this->model = $model;
+    $this->filesystem = $filesystem;
+    $this->config = $config;
+  }
+
+  /** 
+   * Get a user by id.
+   *  
+   * @param  mixed  $id      
+   * @return \PhotoUpload\Models\User     
+   */
+  public function getById($id)   
+  {     
+      return $this->model->findOrFail($id); 
+  } 
+
+  /** 
+   * Get all users paginated.
+   *  
+   * @param  int  $perPage
+   * @return Illuminate\Database\Eloquent\Collection]
+   */
+  public function getAllPaginated($perPage = 200)
+  { 
+    return $this->model    
+                ->orderBy('created_at', 'desc') 
+                ->paginate($perPage);           
   }
 
   /**
@@ -114,6 +171,33 @@ class EloquentUserRepository extends AbstractRepository implements UserRepositor
   }
 
   /**
+   * Find a user by it's username.
+   *
+   * @param  string $username
+   * @return \PhotoUpload\Models\User
+   */
+  public function getByUsername($username)
+  {
+      return $this->model->whereUsername($username)->first();
+  }
+
+  /** 
+   * Require a user by it's username.
+   *
+   * @param  string $username
+   * @return \PhotoUpload\Models\User    
+   * @throws \PhotoUpload\Exceptions\UserNotFoundException
+   */ 
+  public function requireByUsername($username)
+  {
+      if (! is_null($user = $this->getByUsername($username))) {
+          return $user;
+      } 
+        
+      throw new UserNotFoundException('The user "' . $username . '" does not exist!');
+  }  
+
+  /**
    * Create a new user in the database.
    * 
    * @param array $data data 
@@ -142,10 +226,10 @@ class EloquentUserRepository extends AbstractRepository implements UserRepositor
       $user->password = ($data['password'] != '') ? $data['password'] : $user->password;
       
       if ($data['avatar'] != '') {
-          File::move(public_path().'/img/avatar/temp/'.$data['avatar'], 'img/avatar/'.$data['avatar']);
+          $this->filesystem->move($this->config->get('image.avatar_path_tmp') . '/' .$data['avatar'], $this->config->get('image.avatar_path') . '/' . $data['avatar']);
           
           if ($user->photo) {
-              File::delete(public_path().'/img/avatar/'.$user->photo);
+              $this->filesystem->delete($this->config->get('image.avatar_path') . '/' . $user->photo);
           }   
           
           $user->photo = $data['avatar'];
@@ -153,4 +237,18 @@ class EloquentUserRepository extends AbstractRepository implements UserRepositor
       
       return $user->save();
   }
+
+    /**
+     * Delete the specified user from the database.
+     *
+     * @param  mixed  $id
+     * @return void
+     */
+    public function delete($id)
+    {
+      $user = $this->getById($id);
+
+      $user->votes()->detach();
+      $user->delete();
+    }
 }

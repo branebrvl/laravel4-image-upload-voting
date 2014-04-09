@@ -1,3 +1,5 @@
+@extends('layouts.main')
+
 @section('title', 'Tags')
 
 @section('content')
@@ -17,9 +19,9 @@
                     <ul class="nav nav-list">
                         @foreach($tags as $tag)
                             <li>
-                                <a href="{{ route('tricks.browse.tag', $tag->slug) }}">
+                                <a href="{{ route('images.browse.tag', $tag->slug) }}">
                                     {{ $tag->name }}
-                                    <span class="text-muted pull-right">{{$tag->trick_count}}</span>
+                                    <span class="text-muted pull-right">{{$tag->image_count}}</span>
                                 </a>
 
                             </li>

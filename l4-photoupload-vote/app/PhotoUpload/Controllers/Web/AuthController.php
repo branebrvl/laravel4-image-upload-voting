@@ -1,14 +1,9 @@
 <?php namespace PhotoUpload\Controllers\Web;
 
-// use Github;
-// use GithubProvider;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Session;
 use PhotoUpload\Repositories\User\UserRepositoryInterface;
 use PhotoUpload\Repositories\User\RegistrationValidator;
 
-class AuthController extends BaseController
+class AuthController extends WebController
 {
     /**
      * User Repository.
@@ -21,8 +16,10 @@ class AuthController extends BaseController
     /**
      * User Validator 
      * 
-     * @var mixed
+     * @var PhotoUpload\Controllers\Web
      */
+    protected $base;
+
     protected $validator;
 
     /**
@@ -32,12 +29,16 @@ class AuthController extends BaseController
      * @param  \PhotoUpload\Repositories\User\RegistrationValidator $validator
      * @return void
      */
-    public function __construct(UserRepositoryInterface $user, RegistrationValidator $validator)
-    {
-        parent::__construct();
+    public function __construct(
+      UserRepositoryInterface $user,
+      RegistrationValidator $validator,
+      BaseController $base
+    ) {
+      parent::__construct();
 
-        $this->user = $user;
-        $this->validator = $validator;
+      $this->user = $user;
+      $this->validator = $validator;
+      $this->base = $base;
     }
 
     /**
@@ -47,7 +48,8 @@ class AuthController extends BaseController
      */
     public function getLogin()
     {
-        $this->view('home.login');
+      return $this->base
+                  ->view('home.login');
     }
 
     /**
@@ -57,8 +59,13 @@ class AuthController extends BaseController
      */
     public function postLogin()
     {
-        $credentials = Input::only([ 'username', 'password' ]);
-        $remember    = Input::get('remember', false);
+      $credentials = $this->base
+                            ->request
+                            ->only([ 'username', 'password' ]);
+
+      $remember = $this->base
+                         ->request
+                         ->get('remember', false);
 
         if (str_contains($credentials['username'], '@')) 
         {
@@ -66,12 +73,12 @@ class AuthController extends BaseController
             unset($credentials['username']);
         }
 
-        if (Auth::attempt($credentials, $remember)) 
+        if ($this->base->auth->attempt($credentials, $remember)) 
         {
-            return $this->redirectIntended(route('user.index'));
+            return $this->base->redirectIntended(route('user.index'));
         }
 
-        return $this->redirectBack([ 'login_errors' => true ]);
+        return $this->base->redirectBack([ 'login_errors' => true ]);
     }
 
     /**
@@ -81,7 +88,8 @@ class AuthController extends BaseController
      */
     public function getRegister()
     {
-        $this->view('home.register');
+      return $this->base
+                  ->view('home.register');
     }
 
     /**
@@ -91,51 +99,23 @@ class AuthController extends BaseController
      */
     public function postRegister()
     {
-        $input = Input::only(['username', 'email', 'password', 'password_confirmation']);
+      $input = $this->base
+                      ->request
+                      ->only(['username', 'email', 'password', 'password_confirmation']);
 
         if ($this->validator->with($input)->fails()) 
         {
-            return $this->redirectBack([ 'errors' => $this->validator->errors() ]);
+            return $this->base->redirectBack([ 'errors' => $this->validator->errors() ]);
         }
 
         if ($user = $this->user->store($input)) 
         {
-            Auth::login($user);
-            return $this->redirectRoute('user.index', [], [ 'first_use' => true ]);
+            $this->base->auth->login($user);
+            return $this->base->redirectRoute('user.index', [], [ 'first_use' => true ]);
         }
 
-        return $this->redirectRoute('home');
+        return $this->base->redirectRoute('home');
     }
-
-    /**
-     * Handle Github login.
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    // public function getLoginWithGithub()
-    // {
-    //     if (! Input::has('code')) {
-    //         Session::keep([ 'url' ]);
-    //         GithubProvider::authorize();
-    //     } else {
-    //         try {
-    //             $user = Github::register(Input::get('code'));
-    //             Auth::login($user);
-    //
-    //             if (Session::get('password_required')) {
-    //                 return $this->redirectRoute('user.settings', [], [
-    //                     'update_password' => true
-    //                 ]);
-    //             }
-    //
-    //             return $this->redirectIntended(route('user.index'));
-    //         } catch (GithubEmailNotVerifiedException $e) {
-    //             return $this->redirectRoute('auth.register', [
-    //                 'github_email_not_verified' => true
-    //             ]);
-    //         }
-    //     }
-    // }
 
     /**
      * Logout the user.
@@ -144,8 +124,9 @@ class AuthController extends BaseController
      */
     public function getLogout()
     {
-        Auth::logout();
+        $this->base->auth->logout();
 
-        return $this->redirectRoute('auth.login', [], [ 'logout_message' => true ]);
+        return $this->base
+                    ->redirectRoute('auth.login', [], [ 'logout_message' => true ]);
     }
 }
