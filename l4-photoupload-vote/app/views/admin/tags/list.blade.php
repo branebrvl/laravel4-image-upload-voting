@@ -7,7 +7,7 @@
 	<div class="row">
 		<div class="col-lg-12"> 
 			<div class="page-header">
-			  <h1>All Tags <span class="pull-right"><a data-toggle="modal" href="#add_tag" class="btn btn-primary btn-lg">Add new Tag</a></span></h1>
+			  <h1>All Tags <span class="pull-right"><a data-toggle="modal" href="#add_tag" class="add-tag btn btn-primary btn-lg">Add new Tag</a></span></h1>
 			</div>
 		</div>
 	</div>

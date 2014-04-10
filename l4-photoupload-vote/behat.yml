@@ -1,7 +1,47 @@
+# phantomjs:
 default:
+  paths: 
+    features: app/tests/acceptance
+  extensions:
+    Behat\MinkExtension\Extension:
+      base_url: http://render
+      default_session: selenium2
+      javascript_session: selenium2
+      selenium2:
+        wd_host: "http://localhost:8643/wd/hub"
+
+goutte:
     paths: 
         features: app/tests/acceptance
     extensions: 
         Behat\MinkExtension\Extension:
             goutte: ~
             base_url: http://render
+
+selenium:
+    extensions:
+        Behat\MinkExtension\Extension:
+            base_url: http://www.google.com
+            default_session: selenium2
+            javascript_session: selenium2
+            selenium2: ~
+
+iPad:
+  paths: 
+    features: app/tests/acceptance
+  extensions:
+    Behat\MinkExtension\Extension:
+     selenium2:
+      browser: iPad
+      wd_host: SAUCE-USERNAME:SAUCE-API-KEY@ondemand.saucelabs.com/wd/hub
+      capabilities: { platform: Mac 10.8,version: 6}
+
+iPhone:
+  paths: 
+    features: app/tests/acceptance
+  extensions:
+    Behat\MinkExtension\Extension:
+     selenium2:
+      browser: iphone
+      wd_host: SAUCE-USERNAME:SAUCE-API-KEY@ondemand.saucelabs.com/wd/hub
+      capabilities: { platform:Mac 10.,version: 6}

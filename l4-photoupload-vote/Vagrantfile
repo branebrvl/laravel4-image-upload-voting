@@ -1,6 +1,3 @@
-# -*- mode: ruby -*-
-# vi: set ft=ruby :
-
 # Config Github Settings
 github_username = "fideloper"
 github_repo     = "Vaprobash"
@@ -44,7 +41,7 @@ composer_packages     = [        # List any global Composer packages that you wa
   #"phpunit/phpunit:4.0.*",
   #"codeception/codeception=*",
   "phpspec/phpspec:2.0.*@dev",
-  "behat/behat": "2.5.*@stable"
+  "behat/behat:2.5.*@stable"
 ]
 public_folder         = "/vagrant" # If installing Symfony or Laravel, leave this blank to default to the framework public directory
 laravel_root_folder   = "/vagrant/laravel" # Where to install Laravel. Will `composer install` if a composer.json file exists
@@ -54,8 +51,7 @@ nodejs_version        = "latest"   # By default "latest" will equal the latest s
 nodejs_packages       = [          # List any global NodeJS packages that you want to install
   "grunt-cli",
   #"gulp",
-  "bower",
-  "zombie"
+  "bower"
   #"yo",
 ]
 
@@ -75,7 +71,6 @@ Vagrant.configure("2") do |config|
 
   # Create a static IP
   config.vm.network :private_network, ip: server_ip
-
   # Use 777 for the shared folder
   config.vm.synced_folder ".", "/vagrant", {:mount_options => ['dmode=777','fmode=777']}
 
@@ -97,8 +92,8 @@ Vagrant.configure("2") do |config|
     vb.customize ["guestproperty", "set", :id, "/VirtualBox/GuestAdd/VBoxService/--timesync-set-threshold", 10000]
 
     # Prevent VMs running on Ubuntu to lose internet connection
-    # vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-    # vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
 
   end
 
@@ -137,10 +132,10 @@ Vagrant.configure("2") do |config|
   # config.vm.provision "shell", path: "https://raw.github.com/#{github_username}/#{github_repo}/#{github_branch}/scripts/mssql.sh"
 
   # Provision Oh-My-Zsh
-  config.vm.provision "shell", path: "https://raw.github.com/#{github_username}/#{github_repo}/#{github_branch}/scripts/zsh.sh"
+  # config.vm.provision "shell", path: "https://raw.github.com/#{github_username}/#{github_repo}/#{github_branch}/scripts/zsh.sh"
 
   # Provision Vim
-  config.vm.provision "shell", path: "https://raw.github.com/#{github_username}/#{github_repo}/#{github_branch}/scripts/vim.sh"
+  # config.vm.provision "shell", path: "https://raw.github.com/#{github_username}/#{github_repo}/#{github_branch}/scripts/vim.sh"
 
 
   ####

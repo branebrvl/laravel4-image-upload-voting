@@ -1,7 +1,7 @@
 <div class="navbar navbar-default navbar-static-top">
 	<div class="container">
 		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".header-collapse">
+			<button id="rdrop" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".header-collapse">
 				<span class="sr-only">Toggle navigation</span>
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
@@ -24,7 +24,7 @@
 					<li class="visible-xs"><a href="{{ url('login') }}">Login</a></li>
 				@else
 					<li class="visible-xs"><a href="{{ url('user') }}">My profile</a></li>
-					<li class="visible-xs"><a href="{{ url('logout') }}">Logout</a></li>
+					<li class="visible-xs"><a id="logout" href="{{ url('logout') }}">Logout</a></li>
 				@endif
 
 			</ul>
@@ -44,7 +44,7 @@
 					  	<li class="{{( Request::segment('1') == 'user' && Request::segment('2') == '' ? 'active' : false )}}"><a href="{{ url('user')}}">My tricks</a></li>
 					    <li class="{{( Request::segment('2') == 'favorites' ? 'active' : false )}}"><a href="{{ url('user/favorites')}}">My Favorites</a></li>
 					    <li class="{{( Request::segment('2') == 'settings' ? 'active' : false )}}"><a href="{{ url('user/settings')}}">Settings</a></li>
-					    <li><a href="{{ url('logout')}}">Logout</a></li>
+					    <li><a href="{{ url('logout')}}" alt="logout">Logout</a></li>
 					  </ul>
 					</li>
 				</ul>

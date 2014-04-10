@@ -45,8 +45,12 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * @param \Illuminate\Filesystem\Filesystem  $filesystem
    * @return void
    */
-  function __construct(Model $model, Filesystem $filesystem, Config $config, RenderThumbUpload $renderThumbUpload)
-  {
+  function __construct(
+    Model $model, 
+    Filesystem $filesystem, 
+    Config $config, 
+    RenderThumbUpload $renderThumbUpload
+  ) {
     $this->model = $model;
     $this->filesystem = $filesystem;
     $this->config = $config;
@@ -313,8 +317,8 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
       'title' => $data['title'],
       'slug' => $data['title'],
       'description' => $data['description'],
-      'img_big' => $imgBigPath,
-      'img_min' => $imgMin, 
+      'img_big' => $data['render'],
+      'img_min' => $data['render'], 
     ];
 
     $image = $this->model->create($data);
