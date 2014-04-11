@@ -1,6 +1,6 @@
 suites:
   photoupload_suite:
-    namespace: PhotoUpload
+    namespace: Evolve 
     src_path: app
     spec_path: app
     spec_prefix: spec

@@ -28,7 +28,7 @@ return array(
 	|
 	*/
 
-	'model' => 'PhotoUpload\Models\User',
+	'model' => 'Evolve\Render\Models\User',
 
 	/*
 	|--------------------------------------------------------------------------

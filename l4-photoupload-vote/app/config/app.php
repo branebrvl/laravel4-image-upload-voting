@@ -112,13 +112,8 @@ return array(
 
     'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider',
     'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
-
-    'PhotoUpload\Repositories\RepoServiceProvider',
-    'PhotoUpload\Services\Navigation\NavigationServiceProvider',
-    'PhotoUpload\Events\EventServiceProvider',
-    'PhotoUpload\Exceptions\ExceptionServiceProvider',
-    'PhotoUpload\Services\Image\Manipulation\ImageManipServiceProvider',
-    'PhotoUpload\Controllers\Web\ControllersServiceProvider',
+    
+    'Evolve\Render\RenderServiceProvider',
 	),
 
 	/*
@@ -185,7 +180,7 @@ return array(
 		'Validator'       => 'Illuminate\Support\Facades\Validator',
 		'View'            => 'Illuminate\Support\Facades\View',
 
-    'Navigation'      => 'PhotoUpload\Services\Navigation\Facades\Navigatione',
+    'Navigation'      => 'Evolve\Render\Services\Navigation\Facades\Navigatione',
     'Gravatar'        => 'Thomaswelton\LaravelGravatar\Facades\Gravatar',
 
 	),

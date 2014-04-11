@@ -1,0 +1,198 @@
+<?php namespace Evolve\Render\Controllers\Web;
+
+use Evolve\Common\Controllers\BaseController;
+use Evolve\Common\Controllers\WebController;
+use Evolve\Render\Repositories\Image\ImageRepositoryInterface;
+use Evolve\Render\Repositories\Image\ImageUploadValidator;
+use Evolve\Render\Services\Image\Upload\ImageUploadInterface;
+
+/**
+ * ImageController 
+ * 
+ * @author Branislav Vladisavljev 
+ * TODO make abstraction for filesystem uploads and deletes, consider managing assets on CDN
+ */
+class UploadController extends WebController {
+
+  /**
+   * imageRepo 
+   * 
+   * @var mixed
+   */
+  protected $imageRepo;
+  /**
+   * imageUpload 
+   * 
+   * @var mixed
+   */
+  protected $imageUpload;
+  /**
+   * validator 
+   * 
+   * @var mixed
+   */
+  protected $validator;
+
+  /**
+   * BaseController 
+   * 
+   * @var \Evolve\Common\Controllers\Web
+   */
+  protected $base;
+    
+  /**
+   * 
+   * @param  \Evolve\Common\Controllers\Web\BaseController $base
+   * 
+   * @return void
+   */
+  function __construct(
+    ImageRepositoryInterface $imageRepo, 
+    ImageUploadInterface $imageUpload, 
+    ImageUploadValidator $validator,
+    BaseController $base
+  ) {
+    parent::__construct();
+
+    $this->imageRepo = $imageRepo;
+    $this->imageUpload = $imageUpload;
+    $this->validator = $validator;
+    $this->base = $base;
+  }
+
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return Response
+	 */
+	public function create()
+	{
+        // return View::make('images.create');
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @return Response
+   * TODO consider created a Form Upload class to abstrct validation and upload logic
+	 */
+	public function store()
+  {
+    //Let's validate the form first with the rules which are set at the model
+    //If the validation fails, we redirect the user to the index page, with the error messages 
+    if ($this->validator->with(Input::all())->fails()) 
+    {
+      return $this->base
+                  ->redirect
+                  ->to('home')
+                  ->withInput()
+                  ->withErrors($this->validator->errors());
+    } else {    
+      //If the validation passes, we upload the image to the database and process it
+      $image = $this->base
+                     ->request
+                     ->file('image');
+
+      $this->imageUpload->handle($image);            
+
+      //If the file is now uploaded, we show an error message to the user, else we add a new column to the database and show the success message
+      if ($this->imageUpload->succeeds()) {
+
+        $imageRepo->model->create([
+          'img_big' => $this->imageUpload->jsonBody['path'],
+          'img_min' => $this->imageUpload->jsonBody['pathThumb']
+        ]);
+
+        //Now we redirect to the image's permalink
+        return $this->base
+                     ->redirect
+                     ->to('images.show', array($imageRepo->model->slug))
+                     ->with('success', 'Your image is uploaded successfully!');
+      } else {
+        //image cannot be uploaded
+        return $this->base
+                    ->redirect
+                    ->to('home')
+                    ->withInput()
+                    ->with('error', 'Sorry, the image could not be uploaded, please try again later');
+      }   
+    }  
+	}
+
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  int  $id
+	 * @return Response
+   */
+  public function edit($id)
+	{
+    $images = $this->repo->getById($id);
+      
+    return $this->base
+                ->view
+                ->make('images.edit', compact('images'));
+	}
+
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function update($id)
+	{
+    if ($this->validator->with(Input::all())->passes())
+    {
+      $this->repo->update($id, Input::all());
+
+      return $this->base
+                  ->redirect
+                  ->route('image.index')
+                  ->withMessage('Image updated successfully');
+    }
+
+    return $this->base
+                ->redirect
+                ->route('image.edit', $id)
+                ->withInput()                   
+                ->withMessage('There was a problem updating the image')
+                ->withErrors($this->validator->errors());
+	}
+
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  int  $id
+	 * @return Response
+	 */
+	public function destroy($id)
+	{
+    //Let's first find the image
+    $image = $this->imageRepo->getById($id);
+
+    //If there's an image, we will continue to the deleting process
+    if ($image) {
+      //First, let's delete the images from FTP
+      File::delete(Config::get('image.upload_path') . '/' . $image->image);
+      File::delete(Config::get('image.thumb_path') . '/' . $image->image);
+
+      //Now let's delete the value from database
+      $image->delete();
+
+      //Let's return to the main page with a success message
+      return $this->base
+                  ->redirect
+                  ->to('home')
+                  ->with('success', 'Image deleted successfully');
+
+    } else {
+
+      //Image not found, so we will redirect to the index page with an error message flash data.
+      return $this->base
+                  ->redirect
+                  ->to('home')
+                  ->with('error', 'No image with given ID found');
+    }
+	}
+}

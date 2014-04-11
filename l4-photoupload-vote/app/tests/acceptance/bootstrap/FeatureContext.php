@@ -99,8 +99,7 @@ class FeatureContext extends MinkContext
      */
     public function iShouldSeeTheModal($title)
     {
-      $duration = 5000;
-      $this->getSession()->wait($duration, '($(\'#add_tag\').css(\'display\') === \'block\')');
+      $this->getSession()->wait(5000, '($(\'#add_tag\').css(\'display\') === \'block\')');
       $this->assertElementContainsText('.modal-header', $title);
     }
 
@@ -109,9 +108,6 @@ class FeatureContext extends MinkContext
      */
     public function iShouldSeeTheDropdown()
     {
-      // $duration = 5000;
-      // $this->getSession()->wait($duration, '($(\'.navbar-collapse\').hasClass(\'collapse\') === false');
-      // $this->assertElementOnPage('.visible-xs');
       $this->getSession()->wait(5000, '($(\'.navbar-collapse\').css(\'height\') !== \'auto\')');
       $this->assertElementContains('#logout', 'Logout');
     }
@@ -125,6 +121,7 @@ class FeatureContext extends MinkContext
         $this->fillField('username', 'branislav.vladisavljev@evolvemediallc.com');
         $this->fillField('password', 'changeme');
         $this->pressButton('Login');
+        $this->assertPageNotContainsText('E-mail or password was incorrect, please try again');
     }
 
     /**

@@ -34,7 +34,7 @@
    "app/tests/TestCase.php"
     ],
     "psr-4": {
-      "PhotoUpload\\": "app/PhotoUpload"
+      "Evolve\\": "app/Evolve"
     }
   },
   
