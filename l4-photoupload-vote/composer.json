@@ -24,14 +24,13 @@
     "behat/mink-selenium2-driver": "*",
     "behat/mink-goutte-driver": "*",
     "behat/mink-zombie-driver": "*"
-  },
+  }
   
   "autoload": {
     "classmap": [
    "app/commands",
    "app/database/migrations",
-   "app/database/seeds",
-   "app/tests/TestCase.php"
+   "app/database/seeds"
     ],
     "psr-4": {
       "Evolve\\": "app/Evolve"
@@ -56,5 +55,5 @@
     "preferred-install": "dist"
   },
 
-  "minimum-stability": "dev"
+  "minimum-stability": "stable"
 }

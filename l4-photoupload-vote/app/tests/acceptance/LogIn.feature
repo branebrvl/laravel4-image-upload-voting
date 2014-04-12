@@ -1,5 +1,6 @@
 Feature: Sign in to the website
     In order to upload or like images
+    I as a user have to be logged in
 
     Scenario: Login
         Given I am on "/login"

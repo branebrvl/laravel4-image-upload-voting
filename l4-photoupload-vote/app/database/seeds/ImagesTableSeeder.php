@@ -8,7 +8,7 @@ class ImagesTableSeeder extends Seeder {
 	{
 		DB::table('images')->delete();
     $faker = Faker::create();
-    $usersIds = \PhotoUpload\Models\User::lists('id');
+    $usersIds = \Evolve\Render\Models\User::lists('id');
 
     foreach(range(1,30) as $item)
     {

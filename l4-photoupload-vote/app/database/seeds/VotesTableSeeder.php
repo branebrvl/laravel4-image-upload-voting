@@ -8,8 +8,8 @@ class VotesTableSeeder extends Seeder {
 	{
 		DB::table('votes')->delete();
     $faker = Faker::create();
-    $usersIds = \PhotoUpload\Models\User::lists('id');
-    $imagesIds = \PhotoUpload\Models\Image::lists('id');
+    $usersIds = \Evolve\Render\Models\User::lists('id');
+    $imagesIds = \Evolve\Render\Models\Image::lists('id');
 
     foreach(range(1,30) as $item)
     {

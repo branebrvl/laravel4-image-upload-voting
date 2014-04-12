@@ -111,7 +111,7 @@ class ImagePresenter extends BasePresenter
    */
   public function pageTitle()
   {
-    $title     = $this->resource->title;
+    $title = $this->resource->title;
     $baseTitle = ' | Render';
     $maxLength = 70;
 
@@ -150,9 +150,11 @@ class ImagePresenter extends BasePresenter
   {
     $url = parse_url(route('images.show', $this->resource->slug));
 
-    $output  = 'tag:';
+    $output = 'tag:';
     $output .= $url['host'] . ',';
-    $output .= $this->resource->created_at->format('Y-m-d') . ':';
+    $output .= $this->resource
+                    ->created_at
+                    ->format('Y-m-d') . ':';
     $output .= $url['path'];
 
     return $output;

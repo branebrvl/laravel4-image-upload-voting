@@ -201,6 +201,10 @@ if [ $APACHE_IS_INSTALLED -eq 0 ]; then
 
 fi
 
+# Migrate and seed db
+php artisan migrate
+php artisan db:seed
+
     # Move livereload and less files to public folder, initiate npm and bower install and run grunt watch
     # watch logs will be stored in the tmp folder
 

@@ -4,7 +4,7 @@ default:
     features: app/tests/acceptance
   extensions:
     Behat\MinkExtension\Extension:
-      base_url: http://render
+      base_url: http://192.168.33.10.xip.io
       default_session: selenium2
       javascript_session: selenium2
       selenium2:

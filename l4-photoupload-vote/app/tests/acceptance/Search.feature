@@ -5,7 +5,7 @@ Feature: Serach Renders
 
   Scenario: Search Render Posts
     Given I am on "/recent"
-    When I fill in "q" with "es"
+    When I fill in "q" with "sit"
         And I press enter
-    Then I should see "Omnis qui"
+    Then I should see "Sit"
     And I should see "Search results for"

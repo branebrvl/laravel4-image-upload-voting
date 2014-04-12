@@ -9,7 +9,7 @@ class TagsTableSeeder extends Seeder {
 	{
 		DB::table('tags')->delete();
 		$faker = Faker::create();
-    $usersIds = \PhotoUpload\Models\User::lists('id');
+    $usersIds = \Evolve\Render\Models\User::lists('id');
 
 		foreach(range(1, 10) as $index)
 		{

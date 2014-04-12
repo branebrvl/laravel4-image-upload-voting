@@ -8,8 +8,8 @@ class ImageTagTableSeeder extends Seeder {
 	{
 		DB::table('image_tag')->delete();
     $faker = Faker::create();
-    $tagsIds = \PhotoUpload\Models\Tag::lists('id');
-    $imagesIds = \PhotoUpload\Models\Image::lists('id');
+    $tagsIds = \Evolve\Render\Models\Tag::lists('id');
+    $imagesIds = \Evolve\Render\Models\Image::lists('id');
 
     foreach(range(1,30) as $item)
     {
