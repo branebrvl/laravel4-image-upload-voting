@@ -1,6 +1,26 @@
 <?php
-
 // Auth::login(\Evolve\Render\Models\User::find(2));
+
+/*
+|--------------------------------------------------------------------------
+| RESTful routes - API
+|--------------------------------------------------------------------------
+|
+*/
+Route::group(['prefix' => 'api/v1', 'namespace' => 'Evolve\Render\Controllers\Api'], function()
+{                                              
+  Route::get('renders/{id}/tags', 'TagsController@index');
+  Route::resource('renders','RendersController');
+  Route::resource('tags','TagsController',['only' => ['index','show']]);
+}); 
+
+/*
+|--------------------------------------------------------------------------
+| Web routes - The Site
+|--------------------------------------------------------------------------
+|
+*/
+
 # Route filters
 Route::when('admin/*', 'admin');
 

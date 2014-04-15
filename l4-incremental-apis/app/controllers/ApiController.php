@@ -5,7 +5,6 @@ use Illuminate\Http\Response as IlluminateResponse;
  * ApiController 
  * 
  * @uses BaseController
- * @author Branislav Vladisavljev 
  * TODO replace status codes
  */
 class ApiController extends BaseController {

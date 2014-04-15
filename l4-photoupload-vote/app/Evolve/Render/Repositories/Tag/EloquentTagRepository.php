@@ -112,7 +112,6 @@ class EloquentTagRepository extends AbstractRepository implements TagRepositoryI
     return [ $tag, $images ];       
   } 
 
-
   /**
    * Create a new tag in the database.
    *
