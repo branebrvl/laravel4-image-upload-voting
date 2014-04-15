@@ -56,6 +56,7 @@ class RenderThumbUpload extends AbstractUpload implements ImageUploadInterface {
     //These parameters are related to the image processing class that we've included, not really related to Laravel
     $this->imageManip->make($imagePath)
                      ->resize($this->getSize(), $this->getSize())
+                     ->crop($this->config->get('image.thumb_width'), $this->config->get('image.thumb_height'))
                      ->save($this->getPath() . '/' . $file, $this->quality);
 
     $this->succeeds = $this->imageManip->succeeds();

@@ -64,4 +64,21 @@ class ImageManip implements ImageManipInterface
 
     return $this;
   }
+
+  public function crop($width, $height)
+  {
+    try
+    {
+      $this->image->crop($width, $height);
+      $this->succeeds = true;
+    } 
+
+    catch (Exception $e)
+    {
+      $this->errors ='[IMAGE SERVICE] Failed to crop image: [' . $e->getMessage() . ']';  
+      $this->succeeds = false;
+    } 
+
+    return $this;
+  }
 }

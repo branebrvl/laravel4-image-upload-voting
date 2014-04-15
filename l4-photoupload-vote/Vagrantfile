@@ -271,6 +271,6 @@ Vagrant.configure("2") do |config|
   ##########
   config.vm.provision "shell", path: "laravelsetup.sh", args: [server_ip, laravel_root_folder, laravel_db_name, mysql_root_password ]
   config.vm.provision "shell", path: "phantominstall.sh"
-  config.vm.provision "shell", path: "setupdotfiles.sh"
+  # config.vm.provision "shell", path: "setupdotfiles.sh"
 
 end

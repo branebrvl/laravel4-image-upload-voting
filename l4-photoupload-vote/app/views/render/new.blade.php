@@ -1,6 +1,6 @@
 @extends('layouts.main')
 
-@section('title', 'Trick')
+@section('title', 'Render')
 
 @section('styles')
 <link rel="stylesheet" href="{{ URL::asset('css/jquery.Jcrop.min.css') }}">
@@ -189,7 +189,7 @@
             <div class="form-group">
                 <div class="text-right">
                   <button type="submit"  id="save-section" class="btn btn-primary ladda-button" data-style="expand-right">
-                    Save Trick
+                    Save Render
                   </button>
                 </div>
             </div>
