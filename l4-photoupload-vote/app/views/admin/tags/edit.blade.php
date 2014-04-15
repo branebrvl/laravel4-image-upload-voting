@@ -3,11 +3,12 @@
 @section('title','Editing tag')
 
 @section('content')
+<section class="page-wrap">
 <div class="container">
 	<div class="row">
 		<div class="col-lg-6"> 
 			<div class="page-header">
-			  	<h1>Editing a tag <a href="{{ url('admin/tags')}}" class="btn btn-lg btn-default pull-right">Cancel</a></h1>
+			  	<h2>Editing a tag <a href="{{ url('admin/tags')}}" class="btn btn-lg btn-default pull-right">Cancel</a></h2>
 			</div>
             @if($errors->all())
                 <div class="bs-callout bs-callout-danger">
@@ -32,4 +33,5 @@
 	    </div>
 	</div>
 </div>
+</section>
 @stop

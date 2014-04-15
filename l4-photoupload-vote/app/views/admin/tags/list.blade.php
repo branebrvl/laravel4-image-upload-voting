@@ -3,11 +3,12 @@
 @section('title','Viewing tags')
 
 @section('content')
+<section class="page-wrap">
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12"> 
 			<div class="page-header">
-			  <h1>All Tags <span class="pull-right"><a data-toggle="modal" href="#add_tag" class="add-tag btn btn-primary btn-lg">Add new Tag</a></span></h1>
+			  <h2>All Tags <span class="pull-right"><a data-toggle="modal" href="#add_tag" class="add-tag btn btn-primary btn-lg">Add new Tag</a></span></h2>
 			</div>
 		</div>
 	</div>
@@ -37,6 +38,7 @@
 		</div>
 	</div>
 </div>
+</section>
 
 <!-- Modal -->
  <div class="modal fade" id="add_tag" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

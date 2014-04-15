@@ -97,7 +97,7 @@ class BrowseController extends WebController
    */
   public function getBrowsePopular()
   {
-    $images = $this->images->findMostPopular();
+    $images = $this->images->getMostPopular();
 
     $type = 'Popular';
     $pageTitle = 'Browsing Most Popular Photos';

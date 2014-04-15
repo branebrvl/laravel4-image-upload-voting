@@ -26,9 +26,10 @@ return [
 'avatar_width' => 160,
 
 //width of the resized thumbnail
-'thumb_width' => 220,
-'thumb_height' => 150,
+'thumb_width' => 240,
+'thumb_height' => 170,
 
 //width of rendered image
-'render_width' => 500,
+'render_width' => 400,
+'render_height' => 300,
 ];

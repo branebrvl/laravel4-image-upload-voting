@@ -154,11 +154,11 @@
 // 2. Custom Mixins
 
 .helvetica {
-	font-family: Helvetica, Arial, sans-serif;
+  font-family: @font-family-sans-serif;
 }
 
-.mrs-sheppards {
-	font-family: 'Mrs Sheppards', cursive;
+.render-font-family {
+  font-family: 'sweetly_brokenregular';
 }
 
 .align-right {
@@ -180,3 +180,12 @@
 	text-decoration: underline;
 }
 
+//assign custom bg color for panel
+.putBg(@bgColor:#FFFFFF) {
+  background-color:@bgColor;
+}
+
+.background-noise {
+  background-image:url('@{base-url}/noise-f1-99be850299aaf3f1e91225fa7a97228c.gif');
+  background-repeat: -70% 0;
+}

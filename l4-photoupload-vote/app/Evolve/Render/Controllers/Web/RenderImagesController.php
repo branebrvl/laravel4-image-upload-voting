@@ -95,7 +95,7 @@ class RenderImagesController extends WebController
   {
     $tagList = $this->tags->listAll();
 
-    return $this->base->view('tricks.new', compact('tagList'));
+    return $this->base->view('render.new', compact('tagList'));
   }
 
   /**
@@ -140,10 +140,10 @@ class RenderImagesController extends WebController
     $selectedTags = $this->images->listTagsIdsForImage($images);
 
     return $this->base
-                ->view('tricks.edit', [
+                ->view('render.edit', [
                   'tagList' => $tagList,
                   'selectedTags' => $selectedTags,
-                  'trick' => $images
+                  'image' => $images
                 ]);
   }
 
@@ -172,7 +172,8 @@ class RenderImagesController extends WebController
    */
   public function postEdit($slug)
   {
-    $data= $this->request
+    $data= $this->base
+                ->request
                 ->only(['title', 'description', 'tags']);
 
     $image = $this->images->getBySlug($slug);
@@ -186,7 +187,7 @@ class RenderImagesController extends WebController
 
     return $this->base
                 ->redirectRoute('images.edit', [ $image->slug ], [
-                  'success' => 'Image has been updated'
+                  'success' => 'Render has been updated'
                 ]);
   }
 
@@ -202,7 +203,7 @@ class RenderImagesController extends WebController
 
     if ($images->user_id != $this->base->auth->user()->id) 
     {
-      return "This images doesn't belong to you";
+      return "This render doesn't belong to you";
     }
 
     $images->tags()->detach();

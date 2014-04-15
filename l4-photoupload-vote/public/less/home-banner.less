@@ -1,0 +1,30 @@
+.home-banner {
+  background-image: url('@{base-url}/Satsuma-samurai-during-boshin-war-period.jpg');
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: center center;
+
+  height: 300px;
+
+  .introduction {
+    margin-top: 30px;
+    .text-center;
+    h1 {
+      width: 600px;
+      margin: 0 auto;
+
+       @media (max-width: 600px) {
+       font-size: 26px;
+        width: 350px;
+       } 
+    }
+  } 
+
+  .home-banner-links {
+    margin-top: 3em;
+    
+    a {
+      .btn-black-transparent-dark;
+    }
+  }
+}

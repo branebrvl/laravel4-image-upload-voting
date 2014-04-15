@@ -3,11 +3,12 @@
 @section('title', 'Reset password')
 
 @section('content')
+<section class="page-wrap">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-lg-push-4 col-md-6 col-md-push-3 col-sm-8 col-sm-push-2">
                 <div class="content-box login-form">
-                    <h1 class="page-title">Reset password</h1>
+                    <h2 class="page-title">Reset password</h2>
 
                     @if(Session::has('success'))
                       <div class="alert alert-success alert-dismissable">
@@ -40,4 +41,5 @@
             </div>
         </div>
     </div>
+</section>
 @stop

@@ -1,12 +1,14 @@
-<div id="footer">
+<footer>
   <div class="container">
-    <p class="text-muted credit">Website built with <a href="http://laravel.com">Laravel</a>  | <a href="{{ url('about') }}">About</a>
-    <span class="pull-right">
-        <a target="_blank" href="http://twitter.com/laraveltricks" title="Follow updates"><i class="fa fa-twitter fa-lg"></i></a>
-        |
-        <a target="_blank" href="https://github.com/CodepadME/laravel-tricks" title="Get the source of this site"><i class="fa fa-github fa-lg"></i></a>
-    </span>
-    </p>
-
-  </div>
-</div>
+    <div class="row">
+      <section>
+        <ul class="footer-nav">
+          <li>Built with Laravel. Find out more on SI Wiki</li>
+        </ul><!-- / .footer-nav -->
+      </section><!-- / .side-bar -->
+      <section>
+        <a class="logo" href="/">render</a>
+       </section>
+    </div><!-- / .row -->
+  </div><!-- / .container -->
+</footer><!-- / .footer -->

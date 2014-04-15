@@ -78,10 +78,11 @@ jQuery(function ($){
 @stop
 
 @section('content')
+<section class="page-wrap">
 <div class="container">
   <div class="row push-down">
     <div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-      <h1 class="page-title">User settings</h1>
+      <h2>User settings</h2>
     </div>
     <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 text-right">
       <a href="{{ url('user')}}" class="btn btn-primary">Back to profile</a>
@@ -171,7 +172,7 @@ jQuery(function ($){
             </div>
             <div class="form-group">
               <div class="col-lg-offset-7 col-lg-12">
-                <input class="btn btn-sm" type="reset" value="Reset form">
+                <input class="btn btn-primary" type="reset" value="Reset form">
                 <input class="btn btn-primary" type="submit" value="Update">
               </div>
              </div>
@@ -180,11 +181,11 @@ jQuery(function ($){
       </div>
     </div>
 
-    <div class="col-md-7">
+    <div class="col-lg-6 col-lg-push-3 col-md-6 col-md-push-3 col-sm-8 col-sm-push-2 col-xs-12" style="position: absolute; z-index=100;">
      <div id="cropper-preview" style="display:none;">
-       <div class="panel panel-info">
+       <div class="panel panel-primary">
          <div class="panel-heading">
-           <h3 class="panel-title"> Crop the picture </h3>
+           Crop the picture
          </div>
          <div class="panel-body">
            <div class="js-img"></div>
@@ -198,4 +199,5 @@ jQuery(function ($){
 
   </div>
 </div>
+</section>
 @stop

@@ -3,12 +3,13 @@
 @section('title','Profile')
 
 @section('content')
-<div class="container">
+<section class="browse-recent">
+  <div class="container">
 	@if(Session::has('first_use'))
 	  <div class="alert alert-success alert-dismissable text-center">
 		<button type="button" class="close" data-dismiss="alert">&times;</button>
-		<h4>Welcome to Laravel tricks!</h4>
-		<p>Explore the renders, create and share some of your own!</p>
+		<h4>Welcome to Render!</h4>
+		<p>Explore Render, create and share some of your own!</p>
 	  </div>
 	@endif
 
@@ -19,15 +20,16 @@
 	    </div>
 	@endif
 
-	<div class="row push-down">
-		<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-			<h1 class="page-title">My renders </h1>
+	<div class="row">
+		<div class="user-renders-title">
+			<h2>My renders </h2>
 		</div>
-		<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12 text-right">
+		<div class="user-renders-new text-right">
 			<a href="{{ url('user/images/new')}}" class="btn btn-primary"><span class="glyphicon glyphicon-plus"></span> Create new</a>
 		</div>
 	</div>
 
-	@include('tricks.grid', [ 'images' => $images ])
-</div>
+	@include('render.grid', [ 'images' => $images ])
+  </div><!-- / .container -->
+</section><!-- / .browse-recent -->
 @stop

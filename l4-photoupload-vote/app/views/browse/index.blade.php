@@ -3,26 +3,36 @@
 @section('title', $pageTitle)
 
 @section('content')
-	<div class="container">
-		<div class="row push-down">
-			<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-				<h1 class="page-title">{{{ $type }}} images</h1>
-			</div>
-			<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-				@include('partials.search')
-			</div>
-		</div>
+  <section class="browse-recent">
+    <div class="container">
 
-		@if(Request::is('/') || Request::is('popular'))
-		<div class="row push-down">
-			<div class="col-lg-12">
-				<ul class="nav nav-pills">
-					{{-- Navigation::make(Request::path(), 'browse') --}}
-				</ul>
-			</div>
-		</div>
-		@endif
+      <!-- sub nav -->
+      @if(Request::is('popular') || Request::is('recent'))
+        <div class="recent">
+          <ul>
+            {{ Navigation::make(Request::path(), 'browse') }}
+          </ul>
+        </div><!-- / sub nav -->
+      @endif
 
-		@include('tricks.grid', ['images' => $images])
-	</div>
+      <!-- tags browsing-->
+      @if(Request::segment('1') == 'tags')
+        <h2>{{ $pageTitle }}</h2>
+      @endif
+
+      <!-- grid -->
+      @include('render.grid', ['images' => $images])
+
+      <!-- Pagination -->
+      @if($images->count()) 
+          <div class="text-center"> 
+            @if(isset($appends)) 
+              {{ $images->appends($appends)->links(); }} 
+            @else 
+              {{ $images->links(); }} 
+            @endif 
+        </div> <!-- / pagination -->
+      @endif 
+    </div><!-- / .container -->
+  </section><!-- / .browse-recent -->
 @stop

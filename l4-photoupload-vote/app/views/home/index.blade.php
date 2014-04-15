@@ -3,16 +3,24 @@
 @section('title','Welcome')
 
 @section('content')
-	<div class="container">
-		<div class="row push-down">
-			<div class="col-lg-8 col-md-6 col-sm-6 col-xs-12">
-				<h1 class="page-title">Latest images</h1>
-			</div>
-			<div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-				@include('partials.search')
-			</div>
-		</div>
+  <section class="home-banner">
+    <div class="container">
+      <header class="introduction">
+        <h1>If you have to think about a technique you haven't done it enough.</h1>
+        <div class="home-banner-links">
+				  @if(Auth::guest())
+          <a href="{{ url('register') }}">Sign Up</a>
+          @endif
+          <a href="{{ route('browse.recent') }}">Start Browsing</a>
+        </div>
+      </header><!-- / .introduction -->
+    </div>
+  </section><!-- / .home-banner -->
 
-    @include('tricks.grid', ['images' => $images])
-	</div>
+  <section class="home-popular">
+      <div class="container">
+        <h2>Latest Renders</h2>
+        @include('render.grid', ['images' => $images])
+      </div><!-- / .container -->
+  </section><!-- / .home-popular -->
 @stop

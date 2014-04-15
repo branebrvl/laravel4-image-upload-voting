@@ -46,7 +46,7 @@ class HomeController extends WebController
    */
   public function getIndex() 
   {
-    $images = $this->image->getAllPaginated();
+    $images = $this->image->getMostRecent(12);
 
     return $this->base
                 ->view('home.index', compact('images'));

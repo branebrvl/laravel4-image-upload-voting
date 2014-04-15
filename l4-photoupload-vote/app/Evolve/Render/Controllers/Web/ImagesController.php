@@ -64,7 +64,7 @@ class ImagesController extends WebController
       $prev = $this->images->getPreviousImage($image);
 
       return $this->base
-                  ->view('tricks.single', compact('image', 'next', 'prev'));
+                  ->view('render.single', compact('image', 'next', 'prev'));
   }
 
   /**

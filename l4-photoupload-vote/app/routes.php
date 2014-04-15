@@ -1,20 +1,6 @@
 <?php
 
 // Auth::login(\Evolve\Render\Models\User::find(2));
-Route::get('test', function()
-{
-  $users = App::make('Evolve\Render\Repositories\User\UserRepositoryInterface'); 
-  $images = App::make('Evolve\Render\Repositories\Image\ImageRepositoryInterface');
-  return Response::json($images->getAllByUser($users->requireByUsername('possimus')));
-  // return Response::json($users->requireByUsername('branislav'));
-});
-
-Route::get('tagtest', function()
-{
-  $tags = App::make('Evolve\Render\Repositories\Tag\TagRepositoryInterface');
-
-  return Response::json($tags->listAll());
-});
 # Route filters
 Route::when('admin/*', 'admin');
 

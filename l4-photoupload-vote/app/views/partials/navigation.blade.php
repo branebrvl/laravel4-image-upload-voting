@@ -1,21 +1,21 @@
-<div class="navbar navbar-default navbar-static-top">
-	<div class="container">
-		<div class="navbar-header">
-			<button id="rdrop" type="button" class="navbar-toggle" data-toggle="collapse" data-target=".header-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
+<nav>
+  <div class="container">
 
-			<a class="navbar-brand" href="{{ url('/') }}">
-				<span class="sr-only">Logo</span>
-				{{-- <img width="207" height="50" src="{{ asset('img/logo@2x.1.png') }}"> --}}
-			</a>
-		</div>
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-contents">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
 
-		<div class="collapse navbar-collapse header-collapse">
-			<ul class="nav navbar-nav">
+      <a href="{{ url('/') }}" class="navbar-brand logo">
+        render
+      </a>
+    </div> <!-- navbar-header -->
+
+    <div class="navbar-collapse collapse" id="navbar-contents">
+      <ul class="nav navbar-nav">
 
         {{ Navigation::make(Request::path()) }}
 
@@ -26,31 +26,54 @@
 					<li class="visible-xs"><a href="{{ url('user') }}">My profile</a></li>
 					<li class="visible-xs"><a id="logout" href="{{ url('logout') }}">Logout</a></li>
 				@endif
+      </ul>
 
-			</ul>
+      <ul class="nav navbar-nav navbar-right">
 
-			<div class="navbar-right hidden-xs">
 				@if(Auth::guest())
-					<a href="{{ url('register') }}" class="btn btn-primary">Register</a>
-					<a href="{{ url('login') }}" class="btn btn-primary">Login</a>
-				@else
-				<ul class="nav">
-					<li class="dropdown {{( Request::segment(2) == 'settings' || Request::segment(2)=='favorites' ? 'active' : false )}}">
-					  <a href="#" class="dropdown-toggle btn btn-primary" data-toggle="dropdown">
-					  <img src="{{ Auth::user()->photocss }}" width="26px" class="user-avatar-mini"> Profile
-					  <b class="caret"></b>
-					  </a>
-					  <ul class="dropdown-menu">
-					  	<li class="{{( Request::segment('1') == 'user' && Request::segment('2') == '' ? 'active' : false )}}"><a href="{{ url('user')}}">My tricks</a></li>
-					    <li class="{{( Request::segment('2') == 'favorites' ? 'active' : false )}}"><a href="{{ url('user/favorites')}}">My Favorites</a></li>
-					    <li class="{{( Request::segment('2') == 'settings' ? 'active' : false )}}"><a href="{{ url('user/settings')}}">Settings</a></li>
-					    <li><a href="{{ url('logout')}}" alt="logout">Logout</a></li>
-					  </ul>
-					</li>
-				</ul>
-				@endif
-			</div>
-		</div>
+        <li><a href="{{ url('register') }}">Sign Up</a></li>
+        <li><a href="{{ url('login') }}">Log In</a></li>
+        @else
+        <li class="dropdown {{( Request::segment(2) == 'settings' || Request::segment(2)=='favorites' ? 'active' : false )}}">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+            <img src="{{ Auth::user()->photocss }}" class="nav-gravatar" alt="{{ Auth::user()->username}}">{{ Auth::user()->username}}<b class="caret"></b>
+          </a>
 
-	</div>
-</div>
+          <ul class="dropdown-menu dropdown-with-icons {{( Request::segment('1') == 'user' && Request::segment('2') == '' ? 'active' : false )}}">
+            <li class="{{( Request::segment('2') == 'favorites' ? 'active' : false )}}">
+              <a href="{{ url('user')}}">
+                <i class="icon-eye-open"></i>My Render
+              </a>
+            </li>
+
+            <li class="{{( Request::segment('2') == 'favorites' ? 'active' : false )}}">
+              <a href="{{ url('user/favorites')}}">
+                <i class="icon-heart"></i> My Favorites
+              </a>
+            </li>
+
+            <li class="{{( Request::segment('2') == 'settings' ? 'active' : false )}}">
+              <a href="{{ url('user/settings')}}">
+                <i class="icon-pencil"></i> Settings
+              </a>
+            </li>
+
+            <li>
+              <a href="{{ url('logout')}}">
+                <i class="icon-signout"></i> Log Out
+              </a>
+            </li>
+          </ul>
+        </li><!-- / #user-option -->
+        @endif
+        <!-- Search Bubble -->
+        <li>
+          <form id="navbar-search-form" class="navbar-form" role="search" action="/search" style="display: block;">
+          <input type="text" class="search-query form-control" name="q" id="q" placeholder="Search..." value="{{{isset($term) ? $term : ''}}}">
+	        <input style="display:none;" type="submit" value="search">
+          </form>
+        </li>
+      </ul>
+    </div> <!-- .collapse -->
+  </div> <!-- .container -->
+</nav><!-- / .navbar -->

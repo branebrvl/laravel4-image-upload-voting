@@ -65,7 +65,7 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * 
    * @return \Illuminate\Pagination\Paginator
    */
-  public function getAllByUser(User $user, $perPage = 9)
+  public function getAllByUser(User $user, $perPage = 12)
   {
     $images = $user
                   ->images()
@@ -85,7 +85,7 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * @param  integer $perPage
    * @return \Illuminate\Pagination\Paginator
    */   
-  public function getAllFavorites(User $user, $perPage = 9)
+  public function getAllFavorites(User $user, $perPage = 12)
   {     
     $images = $user->votes()
                    ->orderBy('created_at', 'DESC')
@@ -116,7 +116,7 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * 
    * @return void
    */
-  public function getAllPaginated($perPage = 9)
+  public function getAllPaginated($perPage = 12)
   {
     $images = $this->model
                     ->whereHas('user', function ($query) {
@@ -135,7 +135,7 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * 
    * @return void
    */
-  public function getMostRecent($perPage =9)
+  public function getMostRecent($perPage =12)
   {
     return $this->getAllPaginated($perPage);
   }
@@ -171,20 +171,11 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * 
    * @return void
    */
-  public function getMostPopular($perPage =9)
+  public function getMostPopular($perPage =12)
   {
-
-  }
-
-  /**
-   * getMostCommented 
-   * 
-   * @param int $perPage perPage 
-   * 
-   * @return void
-   */
-  public function getMostCommented($perPage =9)
-  {
+    return $this->model
+                  ->orderByRaw('(images.vote_cache * 5 + images.view_cache) DESC')
+                  ->paginate($perPage);
   }
 
   /**

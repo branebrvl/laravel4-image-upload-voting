@@ -1,0 +1,45 @@
+nav {
+  .navbar-inverse; 
+  .navbar-static-top;
+
+  .navbar-nav {
+     li {
+       a {
+        font-size: @nav-font-size;
+        line-height: @navbar-line-height;
+
+        &.active {
+          color: @light-gray;
+        }
+
+      }
+
+      form {
+        line-height: @navbar-line-height;
+      }
+    }
+  }
+
+  .nav-gravatar {
+    .img-circle(); 
+     width: 32px;
+     margin-right: 15px;
+  }
+
+  .navbar-brand {
+    .render-font-family;
+    font-size: 40px;
+    font-weight: 900;
+    line-height: @navbar-line-height;
+  }
+
+  .navbar-right > :first-child {
+    .hidden-xs;
+   } 
+
+  .search-query {
+    background-image:url('@{base-url}/icon-search.png');
+    background-repeat: no-repeat;
+    padding-left: 30px;
+  }
+}

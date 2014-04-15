@@ -45,6 +45,7 @@
 @stop
 
 @section('content')
+<section class="page-wrap">
 <div class="container">
 	<div class="row">
 		<div class="col-lg-12">
@@ -55,7 +56,7 @@
             </div>
        		@endif
 			<div class="page-header">
-			  <h1>Showing all users ({{ $users->getTotal() }})<span class="pull-right"><a data-toggle="modal" href="#add_tag" class="btn btn-primary btn-lg">Add new User</a></span></h1>
+			  <h2>Showing all users ({{ $users->getTotal() }})<span class="pull-right"><a data-toggle="modal" href="#add_tag" class="btn btn-primary btn-lg">Add new User</a></span></h2>
 			</div>
 		</div>
 	</div>
@@ -159,4 +160,5 @@
      </div><!-- /.modal-content -->
    </div><!-- /.modal-dialog -->
  </div><!-- /.modal -->
+</section>
 @stop
