@@ -92,7 +92,11 @@
                         @endif
                     </span>
                     </a> 
+                    @if(!$user->isAdmin())
                     <a class="delete_toggler btn btn-danger btn-sm" rel="{{$user->id}}">Delete</a>
+                    @else
+                    <span style="margin-left: 10px;">Admin</span>
+                    @endif
                   </div>
                 </td>
 				     </tr>

@@ -48,7 +48,7 @@
 
       <article class="the-render">
         <div>
-          <img alt="" src="{{ $image->img_big }}">
+          {{HTML::image($image->img_big, 'render', ['id'=>'renderimg'])}}
         </div>            
       </article><!-- / .render -->
       <article class="render-meta">

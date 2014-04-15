@@ -7239,10 +7239,10 @@ nav .search-query {
   padding-left: 30px;
 }
 .home-banner {
-  background-image: url('../../img/Satsuma-samurai-during-boshin-war-period.jpg');
+  background-image: url('../../img/samurai.jpg');
   background-attachment: fixed;
   background-repeat: no-repeat;
-  background-position: center center;
+  background-position: top center;
   height: 300px;
 }
 .home-banner .introduction {

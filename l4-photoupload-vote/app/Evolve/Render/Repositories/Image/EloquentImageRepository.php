@@ -296,8 +296,8 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
       'title' => $data['title'],
       'slug' => $data['title'],
       'description' => $data['description'],
-      'img_big' => $data['render'],
-      'img_min' => $data['render'], 
+      'img_big' => $this->config->get('image.upload_folder') . '/' . $data['render'],
+      'img_min' => $this->config->get('image.thumb_folder') . '/' . $data['render'], 
     ];
 
     $image = $this->model->create($data);

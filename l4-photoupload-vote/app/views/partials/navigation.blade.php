@@ -29,11 +29,15 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
-
 				@if(Auth::guest())
         <li><a href="{{ url('register') }}">Sign Up</a></li>
         <li><a href="{{ url('login') }}">Log In</a></li>
         @else
+        
+        @if(Auth::user()->isAdmin())
+          <li><a href="{{ url('admin/users') }}">Users</a></li>
+          <li><a href="{{ url('admin/tags') }}">Tags</a></li>
+        @endif 
         <li class="dropdown {{( Request::segment(2) == 'settings' || Request::segment(2)=='favorites' ? 'active' : false )}}">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
             <img src="{{ Auth::user()->photocss }}" class="nav-gravatar" alt="{{ Auth::user()->username}}">{{ Auth::user()->username}}<b class="caret"></b>

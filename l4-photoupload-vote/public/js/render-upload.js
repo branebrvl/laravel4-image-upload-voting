@@ -43,7 +43,7 @@
 
     FileAPI.event.on(uploadimage, 'click', function (evt) {
       FileAPI.upload({
-         url: '{{ route("images.render") }}',
+         url: "{{ route('images.render') }}",
          accept: 'image/*',
          data: { _token: "{{ csrf_token() }}" },
          imageSize: { minWidth: 100, minHeight: 100 },

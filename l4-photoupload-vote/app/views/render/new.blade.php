@@ -49,7 +49,105 @@
 @if(Session::get('errors') == null)
   <script src="{{ asset('js/vendor/uploader/FileAPI.min.js') }}"></script>
   <script src="{{ asset('js/vendor/uploader/caman.full.min.js') }}"></script>
-  <script src="{{ asset('js/render-upload.js') }}"></script>
+<script type="text/javascript" charset="utf-8">
+  $(function() {
+    var
+        file
+      ,  renderedFile
+      , filter = 'vintage' // default filter
+      , processing = false
+    ;
+    
+    function _choose(state){
+      choose.style.display = state ? '' : 'none';
+      photoBooth.style.visibility = !state ? '' : 'hidden';
+      photoBooth.style.height = !state ? '' : '20px';
+    };
+
+    $('.content-box').css('display', 'none');
+    $('#choose').css('display', 'block');
+
+    // Open dialog
+    FileAPI.event.on(browse, 'change', function (evt){
+      file = FileAPI.getFiles(evt)[0];
+      $('.content-box').css('display', 'none');
+      if( file ){
+        _applyFilter(true);
+      }
+    });
+
+
+    // Set filter
+    FileAPI.event.on(PresetFilters, 'click', function (evt){
+      var el = evt.target;
+
+      if( !processing && el.tagName == 'A' ){
+        filter = el.dataset.preset;
+        processing = { el: el, html: el.innerHTML };
+
+        el.parentNode.querySelector('.Active').classList.remove('Active');
+        el.innerHTML = 'Rendering&hellip;';
+        el.className = 'Active';
+
+        _applyFilter();
+      }
+    });
+
+    FileAPI.event.on(uploadimage, 'click', function (evt) {
+      FileAPI.upload({
+         url: "{{ route('images.render') }}",
+         accept: 'image/*',
+         data: { _token: "{{ csrf_token() }}" },
+         imageSize: { minWidth: 100, minHeight: 100 },
+         elements: {
+            active: { show: '.js-upload', hide: '.js-browse' },
+            progress: '.js-progress'
+         },
+         files: { filedata: renderedFile},
+        complete: function (err, xhr){
+          try {
+            $('#PresetFilters').css('display', 'none');
+            $('.content-box').css('display', '');
+            $('#uploadimage').css('display', 'none');
+            $('#output').css('display', 'none');
+            $('#choose').css('display', 'none');
+            // console.log(evt, xhr);
+            // var result = FileAPI.parseJSON(xhr.xhr.responseText);
+            var result = JSON.parse(xhr.response);
+            $('#renderimg').attr('src', $('#renderimg').attr('src') + '/' + result.images.filename);
+            console.log(result.images.filename);
+            $('#render-hidden').attr('value',result.images.filename);
+          } catch (er) {
+            FileAPI.log('PARSE ERROR:', er.message);
+          }
+        }
+      });
+      
+    });
+
+    function _applyFilter(loading){
+      if( loading ){
+        result.innerHTML = '<div class="loader"></div>';
+      }
+      output.style.display = '';
+      uploadimage.style.display = 'block';
+      renderedFile = FileAPI.Image(file)
+        .resize(400, 300, 'max')
+        .filter(filter)
+
+      renderedFile.get(function (err, img){
+          result.innerHTML = '';
+          result.appendChild(img);
+          if( processing ){
+            processing.el.innerHTML = processing.html;
+            processing = false;
+          }
+        })
+      ;
+    }
+  });
+</script>
+
 @endif
 @stop
 
@@ -71,33 +169,32 @@
 					         @endforeach
 					    </div>
 					@endif
-					{{ Form::open(array('class'=>'form-vertical','id'=>'save-trick-form','role'=>'form'))}}
+					{{ Form::open(array('class'=>'form-vertical','id'=>'save-render-form','role'=>'form'))}}
 					    <div class="form-group">
 					    	<label for="title">Title</label>
-					    	{{Form::text('title', null, array('class'=>'form-control','placeholder'=>'Name this trick'));}}
+					    	{{Form::text('title', null, array('class'=>'form-control','placeholder'=>'Name this render'));}}
 					    </div>
 					    <div class="form-group">
 					    	<label for="description">Description</label>
-					    	{{Form::textarea('description',null, array('class'=>'form-control','placeholder'=>'Give detailed description of the trick','rows'=>'3'));}}
+					    	{{Form::textarea('description',null, array('class'=>'form-control','placeholder'=>'Give detailed description of the render','rows'=>'3'));}}
 					    </div>
             <div class="form-group">
-      <input type="hidden" id="render-hidden" name="render" value="{{Session::get('render')}}">
-  </div>
-
-					    <div class="form-group">
-					    	<p>{{ Form::select('tags[]', $tagList, null, array('multiple','id'=>'tags','placeholder'=>'Tag  this trick','class' => 'form-control')); }}</p>
-              </div>
-              {{HTML::image(Config::get('image.upload_folder_tmp') . '/' . Session::get('render'), 'render', ['id'=>'renderimg'])}}
-					    <div class="form-group">
-					        <div class="text-right">
-					          <button type="submit"  id="save-section" class="btn btn-primary ladda-button" data-style="expand-right">
-					            Save Trick
-					          </button>
-					        </div>
-					    </div>
+                <input type="hidden" id="render-hidden" name="render" value="{{Session::get('render')}}">
             </div>
 
-					{{Form::close()}}
+            <div class="form-group">
+              <p>{{ Form::select('tags[]', $tagList, null, array('multiple','id'=>'tags','placeholder'=>'Tag  this render','class' => 'form-control')); }}</p>
+            </div>
+            {{HTML::image(Config::get('image.upload_folder_tmp') . '/' . Session::get('render'), 'render', ['id'=>'renderimg', 'class'=>'thumbnail'])}}
+            <div class="form-group">
+                <div class="text-right">
+                  <button type="submit"  id="save-section" class="btn btn-primary ladda-button" data-style="expand-right">
+                    Save Trick
+                  </button>
+                </div>
+            </div>
+          </div>
+      {{Form::close()}}
     <div id="output" style="display: none; padding: 10px 20px 40px;">
       <div id="result" style="text-align: center; margin: 0 auto;">
       <div class="loader"></div>
