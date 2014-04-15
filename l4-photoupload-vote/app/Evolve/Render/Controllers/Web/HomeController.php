@@ -46,7 +46,7 @@ class HomeController extends WebController
    */
   public function getIndex() 
   {
-    $images = $this->image->getMostRecent(12);
+    $images = $this->image->getMostRecent();
 
     return $this->base
                 ->view('home.index', compact('images'));

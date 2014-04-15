@@ -109,7 +109,7 @@ class FeatureContext extends MinkContext
     public function iShouldSeeTheDropdown()
     {
       $this->getSession()->wait(5000, '($(\'.navbar-collapse\').css(\'height\') !== \'auto\')');
-      $this->assertElementContains('#logout', 'Logout');
+      $this->assertElementContains('.in', 'tags');
     }
 
     /**

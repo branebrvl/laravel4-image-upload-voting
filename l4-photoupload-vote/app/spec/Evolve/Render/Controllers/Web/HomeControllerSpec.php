@@ -23,7 +23,7 @@ class HomeControllerSpec extends ObjectBehavior
   function it_uses_image_repo_to_get_all_paginated(
     \Evolve\Render\Repositories\Image\ImageRepositoryInterface $image
   ) {
-    $image->getAllPaginated()->shouldBeCalled();
+    $image->getMostRecent()->shouldBeCalled();
     $this->getIndex();
     // $this->getIndex()->shouldReturnAnInstanceOf('\Illuminate\View\Environment');
   }

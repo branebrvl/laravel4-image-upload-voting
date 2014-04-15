@@ -135,7 +135,7 @@ class EloquentImageRepository extends AbstractRepository implements ImageReposit
    * 
    * @return void
    */
-  public function getMostRecent($perPage =12)
+  public function getMostRecent($perPage = 12)
   {
     return $this->getAllPaginated($perPage);
   }

@@ -5,7 +5,9 @@ Feature: Serach Renders
 
   Scenario: Search Render Posts
     Given I am on "/recent"
+    When I click on the element ".navbar-toggle"
+      Then I should see the dropdown
     When I fill in "q" with "sit"
-        And I press enter
+      And I press enter
     Then I should see "Sit"
     And I should see "Search results for"
