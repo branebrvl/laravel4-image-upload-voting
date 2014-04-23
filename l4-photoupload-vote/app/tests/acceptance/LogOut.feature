@@ -4,6 +4,7 @@ Feature: Sign out
 
     Scenario: Logout
         Given I am logged in
+        # And I am on a desktop device
         When I go to "/admin/tags"
         Then I should see "All Tags"
         When I click on the element ".navbar-toggle"

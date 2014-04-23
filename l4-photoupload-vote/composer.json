@@ -4,7 +4,7 @@
   "keywords": ["framework", "laravel"],
   "license": "MIT",
   "require": {
-    "laravel/framework": "4.1.*",
+    "laravel/framework": "4.1.25",
     "intervention/image": "dev-master",
     "mccool/laravel-auto-presenter": "1.0.*",
     "league/oauth2-client": "dev-master",
@@ -13,19 +13,16 @@
 
   "require-dev": {
     "way/generators": "dev-master",
-    "phpunit/phpunit": "3.7.*",
     "itsgoingd/clockwork": "dev-master",
     "fzaninotto/faker": "dev-master",
     "mockery/mockery": "dev-master",
     "behat/behat": "2.5.*@stable",
     "behat/mink": "1.5@stable",
     "behat/mink-extension": "*",
-    "behat/mink-sahi-driver": "*",
     "behat/mink-selenium2-driver": "*",
-    "behat/mink-goutte-driver": "*",
-    "behat/mink-zombie-driver": "*"
-  }
-  
+    "behat/mink-goutte-driver": "*"
+  },
+
   "autoload": {
     "classmap": [
    "app/commands",
@@ -36,24 +33,21 @@
       "Evolve\\": "app/Evolve"
     }
   },
-  
   "scripts": {
     "post-install-cmd": [
-   "php artisan clear-compiled",
-   "php artisan optimize"
+      "php artisan clear-compiled",
+      "php artisan optimize"
     ],
     "post-update-cmd": [
-   "php artisan clear-compiled",
-   "php artisan optimize"
+      "php artisan clear-compiled",
+      "php artisan optimize"
     ],
     "post-create-project-cmd": [
-   "php artisan key:generate"
+      "php artisan key:generate"
     ]
   },
-  
   "config": {
     "preferred-install": "dist"
   },
-
-  "minimum-stability": "stable"
+  "minimum-stability": "dev"
 }

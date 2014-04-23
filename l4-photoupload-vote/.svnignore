@@ -2,3 +2,5 @@
 .gitignore
 setupdotfiles.sh
 tags
+public/uploads
+app/storage

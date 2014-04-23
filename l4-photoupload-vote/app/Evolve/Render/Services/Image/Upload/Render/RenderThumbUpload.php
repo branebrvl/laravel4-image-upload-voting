@@ -53,6 +53,7 @@ class RenderThumbUpload extends AbstractUpload implements ImageUploadInterface {
   public function handle($imagePath)
   {
     $file = basename($imagePath); 
+
     //These parameters are related to the image processing class that we've included, not really related to Laravel
     $this->imageManip->make($imagePath)
                      ->resize($this->getSize(), $this->getSize())

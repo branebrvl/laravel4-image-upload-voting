@@ -58,7 +58,7 @@ class RendersController extends ApiController{
     $lessons = $this->images->getAll();
 
     return $this->respond([
-      'data'=> $this->renderTransformer->transformCollection($lessons->toArray())
+       'data'=> $this->renderTransformer->transformCollection($lessons->toArray())
       ]);
 	}
 

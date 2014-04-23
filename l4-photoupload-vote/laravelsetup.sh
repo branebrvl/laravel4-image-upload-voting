@@ -114,7 +114,7 @@ if [ ! -f "/vagrant/composer.json" ]; then
 
   # Update app/bootstrap/start.php with env function
   sed -i -e'27,31d' bootstrap/start.php
-  sed -i "26 a\ \$env = \$app->detectEnvironment(function() { return getenv('LARAVEL4_ENV') ?: 'local'; });" bootstrap/start.php
+  sed -i "26 a\ \$env = \$app->detectEnvironment(function() { return getenv('LARAVEL4_ENV') ?: 'prod'; });" bootstrap/start.php
 
   # Set up local database and service providers for way/generators and clockwork
   mkdir app/config/local
@@ -168,15 +168,6 @@ cat <<EOF > .env.local.php
   ];
 EOF
 
-cat <<EOF > .env.production.php
-  <?php return [
-          'L4_DB_HOST'      => '',     
-          'L4_DB_DATABASE'  => '',
-          'L4_DB_USERNAME'  => '', 
-          'L4_DB_PASSWORD'  => '', 
-  ];
-EOF
-
 else
     echo ">>> Installing Composer Packages:"
     sudo composer install
@@ -197,13 +188,14 @@ if [ $APACHE_IS_INSTALLED -eq 0 ]; then
     rm /etc/apache2/sites-enabled/$1.xip.io.conf > /dev/null 2>&1
     rm /etc/apache2/sites-available/$1.xip.io.conf > /dev/null 2>&1
     vhost -s $1.xip.io -d "/vagrant/public"
+    sudo sed -i 's/.*DocumentRoot.*/SetEnv LARAVEL_ENV local\n&/' /etc/apache2/sites-available/192.168.33.10.xip.io.conf
     sudo service apache2 reload
-
 fi
 
 # Migrate and seed db
-php artisan migrate
-php artisan db:seed
+cd /vagrant
+php artisan migrate --env=local
+php artisan db:seed --env=local
 
     # Move livereload and less files to public folder, initiate npm and bower install and run grunt watch
     # watch logs will be stored in the tmp folder

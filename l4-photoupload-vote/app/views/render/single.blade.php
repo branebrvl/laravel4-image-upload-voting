@@ -32,7 +32,7 @@
                 @include('render.delete',['link'=>$image->deleteLink])
             </div>
         @endif
-        <a href="#" class="pull-left"><img src="{{ $image->user->photocss }}" alt=""></a>
+        <a href="{{ route('user.profile', $image->user->username) }}" class="pull-left"><img src="{{ $image->user->photocss }}" alt=""></a>
           <div class="media-body">
             <h2 class="render-title">{{ $image->title }}</h2>
             <ul>
@@ -95,7 +95,7 @@
               <a  href="{{ route('images.show', $prev->slug) }}"
                   title="{{ $prev->title }}"
                   class="btn btn-sm btn-primary">
-                      &laquo; Previous Trick
+                      &laquo; Previous Render
               </a>
           @endif
 
@@ -103,7 +103,7 @@
               <a  href="{{ route('images.show', $next->slug) }}"
                   title="{{ $next->title }}"
                   class="btn btn-sm btn-primary pull-right">
-                      Next Trick &raquo;
+                      Next Render &raquo;
               </a>
           @endif
         </div>

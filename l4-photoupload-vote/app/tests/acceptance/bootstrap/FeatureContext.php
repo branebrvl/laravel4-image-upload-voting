@@ -109,7 +109,7 @@ class FeatureContext extends MinkContext
     public function iShouldSeeTheDropdown()
     {
       $this->getSession()->wait(5000, '($(\'.navbar-collapse\').css(\'height\') !== \'auto\')');
-      $this->assertElementContains('.in', 'tags');
+      $this->assertElementContains('.in', 'Tags');
     }
 
     /**
@@ -131,5 +131,13 @@ class FeatureContext extends MinkContext
     {
       $this->getSession()->evaluateScript('$(\'input[value="search"]\').toggle();');
       $this->pressButton('search');
+    }
+    /**
+     * @Given /^I am on desktop device$/
+     */
+    public function iAmOnDesktopDevice()
+    {
+      // $this->getSession()->resizeWindow(1024, 768);
+      $this->getSession()->resizeWindow(1440, 900, 'current');
     }
 }
