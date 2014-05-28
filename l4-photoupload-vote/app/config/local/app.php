@@ -8,12 +8,10 @@
     |--------------------------------------------------------------------------
     */
 
-    'providers' => append_config(array(
-
-        'Clockwork\Support\Laravel\ClockworkServiceProvider',
-        'Way\Generators\GeneratorsServiceProvider',
-
-    )),
+    'providers' => append_config([
+      'Clockwork\Support\Laravel\ClockworkServiceProvider',
+      'Way\Generators\GeneratorsServiceProvider',
+    ]),
 
     /*
     |--------------------------------------------------------------------------
@@ -21,10 +19,8 @@
     |--------------------------------------------------------------------------
     */
 
-    'aliases' => append_config(array(
-
-        'Clockwork'       => 'Clockwork\Support\Laravel\Facade',
-
-    )),
+    'aliases' => append_config([
+      'Clockwork' => 'Clockwork\Support\Laravel\Facade',
+    ]),
 
 ];

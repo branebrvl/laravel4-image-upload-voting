@@ -25,7 +25,7 @@ $app = new Illuminate\Foundation\Application;
 */
 
 $env = $app->detectEnvironment(function() {
-  return getenv('LARAVEL_ENV') ?: 'prod';
+  return getenv('LARAVEL4_ENV') ?: 'prod';
 });
 
 /*

@@ -39,7 +39,7 @@ else
 fi
 
 if [ -z "$2" ]; then
-      laravel_root_folder="laravel"
+      laravel_root_folder="/vagrant"
 else
       laravel_root_folder="$2"
 fi
@@ -67,26 +67,28 @@ apache2 -v > /dev/null 2>&1
 APACHE_IS_INSTALLED=$?
 
 # Is laravel installed
-if [ ! -f "/vagrant/composer.json" ]; then
-  cd /vagrant
+if [ ! -f "$laravel_root_folder/composer.json" ]; then
+  cd $laravel_root_folder
+  mkdir tmp
   # Intial Setup
-  echo -e "\n$COL_PURPLE Configuring New Laravel 4.1 Application...\n$COL_RESET"
+  echo -e "\n$COL_PURPLE Configuring New Laravel 4.1 Application in dir $laravel_root_folder ...\n$COL_RESET"
 
   # Create new laravel Project
   echo -e "\n$COL_PURPLE Performing Composer create-project, this may take some time, grab a coffee...\n$COL_RESET"
   # sudo composer create-project laravel/laravel --prefer-dist
   # git clone https://github.com/laravel/laravel.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard && rm -rf .git
+  pwd
   git clone https://github.com/laravel/laravel.git tmp && rm -rf tmp/.git readme.md && mv tmp/{.,}* ./ 
-  rm -rf /vagrant/tmp
+  rm -rf $laravel_root_folder/tmp
 
     echo -e "\n $COL_PURPLE Installing less and livereload project...\n $COL_RESET"
-    cd /vagrant
+    cd $laravel_root_folder
     mv gruntwatchlesslivereload/{.,}* public/ 
-    rm -rf /vagrant/gruntwatchlesslivereload 
-    # cd /vagrant/public
+    rm -rf $laravel_root_folder/gruntwatchlesslivereload 
+    # cd $laravel_root_folder/public
     # npm install
     # bower install   
-    cd /vagrant
+    cd $laravel_root_folder
     echo -e "\n $COL_PURPLE LiveReload monitors changes in the file system. As soon as you save a file, it is preprocessed as needed, and the browser is refreshed.\n $COL_RESET"
     echo -e "\n $COL_PURPLE Please be sure to enable the LiveReload plugin in your broswer\n $COL_RESET"
 
@@ -99,7 +101,19 @@ if [ ! -f "/vagrant/composer.json" ]; then
   # Install and Configure way/generators, itsgoingd/clockwork, fzaninotto/faker packages
   echo -e "\n"
   echo -e "-- Adding $COL_GREEN Way/Generators, itsgoingd/clockwork$COL_RESET and$COL_GREEN Faker$COL_RESET Libraries to $COL_YELLOW$laravel_root_folder$COL_RESET"
-  sed -i '8 a\ \t"require-dev" : { \n \t\t"way/generators": "dev-master", \n \t\t"itsgoingd/clockwork": "dev-master", \n \t\t"fzaninotto/faker": "dev-master" \n\t},' composer.json
+  sed -i '8 a\
+    "require-dev": { \
+      "way/generators": "dev-master", \
+      "itsgoingd/clockwork": "dev-master", \
+      "fzaninotto/faker": "dev-master", \
+      "mockery/mockery": "dev-master", \
+      "behat/behat": "2.5.*@stable", \
+      "behat/mink": "1.5@stable", \
+      "behat/mink-extension": "*", \
+      "behat/mink-selenium2-driver": "*", \
+      "behat/mink-goutte-driver": "*" \
+    },
+  ' composer.json
   sed -i "109 a\ \t\t'Way\\\Generators\\\GeneratorsServiceProvider'," app/config/app.php
   sed -i "110 a\ \t\t'Clockwork\\\Support\\\Laravel\\\ClockworkServiceProvider'," app/config/app.php
   echo -e "\n$COL_PURPLE Performing Composer Update with new dependencies...\n$COL_RESET"
@@ -117,24 +131,38 @@ if [ ! -f "/vagrant/composer.json" ]; then
   sed -i "26 a\ \$env = \$app->detectEnvironment(function() { return getenv('LARAVEL4_ENV') ?: 'prod'; });" bootstrap/start.php
 
   # Set up local database and service providers for way/generators and clockwork
-  mkdir app/config/local
 
   cat <<'EOF' > app/config/local/app.php
   <?php return [
-      
-      'debug' => true,
-      // specify require-dev aliases, service proveders are specifed in start/local.php
-      'aliases' => ['Clockwork' => 'Clockwork\Support\Laravel\Facade'],
+
+    'debug' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Append environment service providers
+    |--------------------------------------------------------------------------
+    */
+
+    'providers' => append_config([
+      'Clockwork\Support\Laravel\ClockworkServiceProvider',
+      'Way\Generators\GeneratorsServiceProvider',
+    ]),
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Append environment aliases
+    |--------------------------------------------------------------------------
+    */
+
+    'aliases' => append_config([
+      'Clockwork' => 'Clockwork\Support\Laravel\Facade',
+    ]),
+
   ];
 EOF
 
   cat <<'EOF' > app/start/local.php
   <?php
-
-  // specify require-dev service providers, aliases are specifed in app/config/local/app.php
-  App::register( 'Clockwork\Support\Laravel\ClockworkServiceProvider' );
-  App::register( 'Way\Generators\GeneratorsServiceProvider' );
-
   function l($val)
   {
     return Clockwork::info($val);
@@ -185,15 +213,15 @@ sudo /etc/init.d/mysql restart
 # Create new apache vhost
 if [ $APACHE_IS_INSTALLED -eq 0 ]; then
     # Remove apache vhost from default and create a new one
-    rm /etc/apache2/sites-enabled/$1.xip.io.conf > /dev/null 2>&1
-    rm /etc/apache2/sites-available/$1.xip.io.conf > /dev/null 2>&1
-    vhost -s $1.xip.io -d "/vagrant/public"
-    sudo sed -i 's/.*DocumentRoot.*/SetEnv LARAVEL_ENV local\n&/' /etc/apache2/sites-available/192.168.33.10.xip.io.conf
+    sudo rm /etc/apache2/sites-enabled/$ip_address.xip.io.conf > /dev/null 2>&1
+    sudo rm /etc/apache2/sites-available/$ip_address.xip.io.conf > /dev/null 2>&1
+    sudo vhost -s $1.xip.io -d "$laravel_root_folder/public"
+    sudo sed -i 's/.*DocumentRoot.*/SetEnv LARAVEL4_ENV local\n&/' /etc/apache2/sites-available/$ip_address.xip.io.conf
     sudo service apache2 reload
 fi
 
 # Migrate and seed db
-cd /vagrant
+cd $laravel_root_folder
 php artisan migrate --env=local
 php artisan db:seed --env=local
 

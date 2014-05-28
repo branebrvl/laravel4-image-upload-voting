@@ -64,4 +64,18 @@ class ApiController extends BaseController {
                   'message' => $message
                 ]);
   }
+
+  protected function respondWithPagination($lessons, $data)
+  {
+    $data = array_merge($data, [
+       'paginator' => [
+        'total_count' => $lessons->getTotal(),
+        'total_pages' => ceil($lessons->getTotal() / $lessons->getPerPage()),
+        'current_page' => $lessons->getCurrentPage(),
+        'limit' => $lessons->getPerPage()
+       ]
+      ]);
+
+    return $this->respond($data);
+  }
 }

@@ -11,7 +11,7 @@ return array(
 	| stack traces will be shown on every error that occurs within your
 	| application. If disabled, a simple generic error page is shown.
 	|
-	*/
+*/
 
 	'debug' => false,
 
@@ -113,7 +113,8 @@ return array(
     'McCool\LaravelAutoPresenter\LaravelAutoPresenterServiceProvider',
     'Thomaswelton\LaravelGravatar\LaravelGravatarServiceProvider',
     
-    'Evolve\Render\RenderServiceProvider',
+    'Evolve\Render\RenderRegisterServiceProvider',
+    'Evolve\Render\RenderBootServiceProvider',
 	),
 
 	/*

@@ -19,14 +19,15 @@ class LessonsController extends ApiController{
 	 */
 	public function index()
   {
-    $lessons = Lesson::all();
+    $limit = Input::get('limit')?:3;
+    $lessons = Lesson::paginate($limit);
 
-    return $this->respond([
-      'data'=> $this->lessonTransformer->transformCollection($lessons->toArray())
-      ]);
+    return $this->respondWithPagination($lessons, [
+      'data' => $this->lessonTransformer->transformCollection($lessons->all())  
+    ]);
 	}
-
-	/**
+  
+  /**
 	 * Show the form for creating a new resource.
 	 *
 	 * @return Response

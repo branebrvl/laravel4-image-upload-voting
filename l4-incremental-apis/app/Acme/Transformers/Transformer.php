@@ -7,6 +7,6 @@ abstract class Transformer {
     return array_map([$this, 'transform'], $items); 
   }
 
-  public abstract function transform(array $item);
+  public abstract function transform($item);
 
 }

@@ -6,7 +6,6 @@ use Evolve\Common\Controllers\Web\BaseController;
 use Evolve\Common\Utilities\Helpers;
 use Evolve\Common\Services\Image\Manipulation\Intervention;
 use Evolve\Common\Services\Image\Manipulation\Intervention\ImageManip;
-use Evolve\Common\Exceptions\AbstractNotFoundException;
 use Evolve\Render\Services\Image\Upload\Render\RenderUpload;
 use Evolve\Render\Services\Image\Upload\Render\RenderThumbUpload;
 use Evolve\Render\Repositories\Image\EloquentImageRepository;
@@ -23,50 +22,29 @@ use Evolve\Render\Services\Image\Upload\Avatar\AvatarUpload;
  * 
  * @uses ServiceProvider
  */
-class RenderServiceProvider extends ServiceProvider {
-
-  public function boot()
-  {
-    $app = $this->app;
-
-    # bootstrpa app  events
-    $app['events']->listen('image.view', '\Evolve\Render\Events\ViewImageHandler');
-
-    #bootstrap app errors
-    $app->error(function(AbstractNotFoundException $exception) use ($app)
-    {
-      $error = $exception->getMessage();
-      $app->log->error($error);
-
-      return $app->make('\Illuminate\Support\Facades\Response')
-                 ->view('home.error', compact('error'), 404);
-    });
-
-    $app->error(function(\Symfony\Component\HttpKernel\Exception\NotFoundHttpException $exception) use ($app)
-    {
-      $error = 'Page Not Found: ' . $app->request->url();;
-      $app->log->error('NotFoundHttpException Route: ' . $app->request->url() );
-
-      return $app->make('\Illuminate\Support\Facades\Response')
-                 ->view('home.error', compact('error'), 404);
-    });
-
-    $app->error(function(\Illuminate\Database\Eloquent\ModelNotFoundException $exception) use ($app)
-    {
-      $error = $exception->getMessage();
-      $app->log->error($error);
-
-      return $app->make('\Illuminate\Support\Facades\Response')
-                 ->view('home.error', compact('error'), 404);
-    });
-  }
+class RenderRegisterServiceProvider extends ServiceProvider {
 
   /**
-   * Register the service provider.
+   * Register service providears.
    *
    * @return void            
    */
   public function register() 
+  {
+    $this->registerAvatarUploadService();
+    $this->registerBaseController();
+    $this->registerRenderUploadService();
+    $this->registerThumbUploadService();
+    $this->registerImageRepository();
+    $this->registerUserRepository();
+    $this->registerTagRepository();
+
+    $this->app['navigation.builder'] = $this->app->share(function ($app) {
+      return new Builder($app['config'], $app['auth']);
+    });
+  }
+
+  protected function registerAvatarUploadService()
   {
     $this->app->bind('Evolve\Render\Services\Image\Upload\Avatar\AvatarUpload', function($app)
     {
@@ -77,7 +55,10 @@ class RenderServiceProvider extends ServiceProvider {
         new Helpers
       );
     });
+  }
 
+  protected function registerBaseController()
+  {
     $this->app->bind('Evolve\Common\Controllers\Web\BaseController', function($app)
     {
       return new BaseController(
@@ -87,7 +68,10 @@ class RenderServiceProvider extends ServiceProvider {
         $app->make('view')
       );
     });
+  }
 
+  protected function registerRenderUploadService()
+  {
     $this->app->bind('Evolve\Render\Services\Image\Upload\Render\RenderUpload', function($app)
     {
       return new RenderUpload(
@@ -97,7 +81,10 @@ class RenderServiceProvider extends ServiceProvider {
         new Helpers
       );
     });
+  }
 
+  protected function registerThumbUploadService()
+  {
     $this->app->bind('Evolve\Render\Services\Image\Upload\Render\RenderThumbUpload', function($app)
     {
       return new RenderThumbUpload(
@@ -107,7 +94,10 @@ class RenderServiceProvider extends ServiceProvider {
         new Helpers
       );
     });
+  }
 
+  protected function registerImageRepository()
+  {
     $this->app->bind('Evolve\Render\Repositories\Image\ImageRepositoryInterface', function($app)
     {
       return new EloquentImageRepository(
@@ -116,19 +106,21 @@ class RenderServiceProvider extends ServiceProvider {
         $app->config, 
         $app->make('Evolve\Render\Services\Image\Upload\Render\RenderThumbUpload'));
     });
+  }
 
+  protected function registerUserRepository()
+  {
     $this->app->bind('Evolve\Render\Repositories\User\UserRepositoryInterface', function($app)
     {
        return new EloquentUserRepository(new User, $app->files, $app->config);
     });
+  }
 
+  protected function registerTagRepository()
+  {
     $this->app->bind('Evolve\Render\Repositories\Tag\TagRepositoryInterface', function($app)
     {
        return new EloquentTagRepository(new Tag);
-    });
-
-    $this->app['navigation.builder'] = $this->app->share(function ($app) {
-      return new Builder($app['config'], $app['auth']);
     });
   }
 } 
